@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Amader Durga Puja — by Debasmita Das | Kolkata Pandal Hopping Trails</title>
+    <meta name="description"
+        content="Amader Durga Puja by Debasmita Das — elegant Kolkata pandal hopping trails for North & South Kolkata with live walking routes, auto shortcuts and step-by-step guides. Shubho Sharodiya!" />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Tiro+Bangla:ital@0;1&family=Jost:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ivory: '#FDF8EE',
+                        cream: '#FFFDF6',
+                        maroon: { DEFAULT: '#7A1C1C', deep: '#4A0E0E', soft: '#9B2C2C' },
+                        gold: { DEFAULT: '#C99A2B', light: '#E8C86A', pale: '#F7E8B8', dark: '#9A7418' },
+                        coco: '#3A2420'
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                        bengali: ['"Tiro Bangla"', 'serif'],
+                        sans: ['Jost', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Jost', system-ui, sans-serif;
+            background-color: #FDF8EE;
+            color: #3A2420;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Subtle alpana-dot texture */
+        .alpana-bg {
+            background-image: radial-gradient(rgba(201, 154, 43, 0.14) 1px, transparent 1px);
+            background-size: 22px 22px;
+        }
+
+        .hero-glow {
+            background:
+                radial-gradient(ellipse 60% 45% at 50% 0%, rgba(232, 200, 106, 0.35), transparent 70%),
+                radial-gradient(ellipse 40% 30% at 50% 20%, rgba(155, 44, 44, 0.08), transparent 70%);
+        }
+
+        /* Gold double rule with centre motif */
+        .gold-rule {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            justify-content: center;
+        }
+
+        .gold-rule::before,
+        .gold-rule::after {
+            content: "";
+            height: 1px;
+            width: 72px;
+            background: linear-gradient(90deg, transparent, #C99A2B);
+        }
+
+        .gold-rule::after {
+            background: linear-gradient(90deg, #C99A2B, transparent);
+        }
+
+        .card-lift {
+            transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+        }
+
+        .card-lift:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 48px -18px rgba(74, 14, 14, .28);
+            border-color: #C99A2B;
+        }
+
+        .btn-maroon {
+            transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+        }
+
+        .btn-maroon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px -12px rgba(122, 28, 28, .55);
+        }
+
+        .btn-gold {
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px -12px rgba(201, 154, 43, .6);
+        }
+
+        /* Diya flame flicker */
+        @keyframes flicker {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(-1.5deg);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.06) rotate(1.5deg);
+                opacity: .92;
+            }
+        }
+
+        .flame {
+            display: inline-block;
+            animation: flicker 2.6s ease-in-out infinite;
+            transform-origin: 50% 90%;
+        }
+
+        /* Gentle reveal on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Thin decorative border frame for quote */
+        .frame-double {
+            outline: 1px solid rgba(232, 200, 106, .5);
+            outline-offset: 6px;
+        }
+
+        ::selection {
+            background: #7A1C1C;
+            color: #FDF8EE;
+        }
+
+        /* ---- Mobile-first Chrome experience ---- */
+        html,
+        body {
+            overflow-x: clip;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            -webkit-tap-highlight-color: rgba(122, 28, 28, .18);
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        section[id],
+        main[id] {
+            scroll-margin-top: 84px;
+        }
+
+        #mobileMenu a {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .flame {
+                animation: none;
+            }
+        }
+    </style>
+    <noscript>
+        <style>
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        </style>
+    </noscript>
+</head>
+
+<body class="bg-ivory text-coco">
+
+    <!-- Auspicious top strip -->
+    <div class="bg-maroon-deep text-gold-pale text-center text-[11px] sm:text-xs tracking-[0.18em] sm:tracking-[0.25em] uppercase py-2 px-3 leading-relaxed">
+        শুভ শারদীয়া &nbsp;·&nbsp; Shubho Sharodiya &nbsp;·&nbsp; 2026
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-gold/30">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+            <a href="#top" class="flex items-center gap-2.5 group">
+                <span
+                    class="w-10 h-10 rounded-full bg-maroon text-gold-pale flex items-center justify-center text-xl shadow-md ring-1 ring-gold/60 group-hover:scale-105 transition">🪔</span>
+                <span class="leading-tight">
+                    <span class="block font-serif font-bold text-lg sm:text-xl text-maroon-deep tracking-wide">Amader
+                        Durga Puja</span>
+                    <span class="block text-[11px] tracking-[0.2em] uppercase text-gold-dark">by Debasmita Das</span>
+                </span>
+            </a>
+            <nav class="hidden md:flex items-center gap-7 text-sm tracking-wide text-coco/80">
+                <a href="#trails" class="hover:text-maroon font-medium transition">Trails</a>
+                <a href="#how" class="hover:text-maroon font-medium transition">How it works</a>
+                <a href="#tips" class="hover:text-maroon font-medium transition">Puja Tips</a>
+                <a href="#about" class="hover:text-maroon font-medium transition">About</a>
+            </nav>
+            <div class="flex items-center gap-2">
+                <a href="#trails"
+                    class="btn-maroon hidden sm:inline-flex items-center gap-1.5 bg-maroon hover:bg-maroon-soft text-ivory text-sm font-medium px-4 py-2 rounded-full">
+                    Start Hopping <span aria-hidden="true">→</span>
+                </a>
+                <button id="menuBtn"
+                    class="md:hidden w-11 h-11 rounded-full border border-gold/50 text-maroon-deep flex items-center justify-center text-lg"
+                    aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">☰</button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="md:hidden hidden border-t border-gold/25 bg-cream px-6 py-3 text-sm space-y-2">
+            <a href="#trails" class="block py-1.5 hover:text-maroon">Trails</a>
+            <a href="#how" class="block py-1.5 hover:text-maroon">How it works</a>
+            <a href="#tips" class="block py-1.5 hover:text-maroon">Puja Tips</a>
+            <a href="#about" class="block py-1.5 hover:text-maroon">About</a>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="top" class="relative overflow-hidden alpana-bg hero-glow">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-14 sm:pt-20 pb-10 text-center">
+
+            <p
+                class="inline-flex items-center gap-2 text-[11px] sm:text-xs tracking-[0.22em] uppercase text-maroon bg-white/70 border border-gold/50 rounded-full px-4 py-1.5 shadow-sm">
+                <span class="flame">🪔</span> Kolkata Pandal Hopping Guide <span class="flame">🪔</span>
+            </p>
+
+            <p class="font-bengali text-maroon-soft/90 text-xl sm:text-2xl mt-6">আমাদের দুর্গা পূজা</p>
+            <h1 class="font-serif font-bold text-maroon-deep text-5xl sm:text-6xl md:text-7xl leading-[1.02] mt-2">
+                Amader<br class="sm:hidden" /> Durga Puja
+            </h1>
+            <p class="font-serif italic text-coco/70 text-lg sm:text-xl mt-3">Homecoming, dhak, shiuli &amp; the city of
+                joy in full bloom.</p>
+
+            <div class="gold-rule mt-6 text-gold-dark text-sm"><span>✦ &nbsp; ❁ &nbsp; ✦</span></div>
+
+            <p class="max-w-2xl mx-auto mt-6 text-[15px] sm:text-base leading-relaxed text-coco/80">
+                Handcrafted walking trails through the great <em class="font-serif">para pujas</em> of
+                North &amp; South Kolkata — with live maps, turn-by-turn walking routes,
+                and shared-auto shortcuts, so you wander more and worry less.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+                <a href="#trails"
+                    class="btn-maroon w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-maroon hover:bg-maroon-soft text-ivory font-medium px-7 py-3 rounded-full text-[15px]">
+                    Explore the Trails <span aria-hidden="true">→</span>
+                </a>
+            </div>
+
+            <div
+                class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8 text-xs sm:text-[13px] text-coco/65 tracking-wide">
+                <span class="inline-flex items-center gap-1.5">📍 Live GPS walking routes</span>
+                <span class="inline-flex items-center gap-1.5">🚶 Curated stop order</span>
+                <span class="inline-flex items-center gap-1.5">🛺 Auto-stand shortcuts</span>
+            </div>
+        </div>
+
+        <!-- Alpana divider -->
+        <div class="pb-2">
+            <svg viewBox="0 0 1200 40" class="w-full h-8 text-gold/70" preserveAspectRatio="none" aria-hidden="true">
+                <g fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.8">
+                    <circle cx="600" cy="20" r="9" />
+                    <circle cx="600" cy="20" r="3.5" fill="currentColor" stroke="none" opacity="0.55" />
+                    <path d="M0 20 H560 M640 20 H1200" />
+                    <circle cx="540" cy="20" r="4" />
+                    <circle cx="660" cy="20" r="4" />
+                    <circle cx="500" cy="20" r="2.4" fill="currentColor" stroke="none" />
+                    <circle cx="700" cy="20" r="2.4" fill="currentColor" stroke="none" />
+                    <path d="M585 20 l7 -7 M615 20 l-7 -7 M585 20 l7 7 M615 20 l-7 7" />
+                </g>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Trails -->
+    <main id="trails" class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div class="text-center max-w-2xl mx-auto reveal">
+            <p class="text-[11px] tracking-[0.28em] uppercase text-gold-dark font-medium">Choose your para · Choose your
+                trail</p>
+            <h2 class="font-serif font-bold text-3xl sm:text-4xl text-maroon-deep mt-2">The Pandal Trails</h2>
+            <p class="text-coco/70 mt-3 text-[15px] leading-relaxed">Each trail opens a live navigator — walking
+                polyline, pandal cards, progress tracker and auto-stand guide. Pick a side of the city, or take it all
+                in.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
+
+            <!-- North -->
+            <a href="north_kolkata_durga_puja_pandal_hopping_route_map_by_DDas.html"
+                class="reveal card-lift rounded-2xl bg-cream p-6 border border-maroon/15 flex flex-col"
+                style="transition-delay:.05s">
+                <span
+                    class="w-11 h-11 rounded-full bg-maroon/10 border border-maroon/20 flex items-center justify-center text-2xl">🏛️</span>
+                <h3 class="font-serif font-bold text-2xl text-maroon-deep mt-3">North Kolkata</h3>
+                <p class="font-bengali text-maroon-soft/70 text-sm mt-0.5">বনেদি পাড়ার পূজা</p>
+                <p class="text-sm text-coco/75 leading-relaxed mt-3 flex-1">Rajbaris &amp; heritage lanes — Bagbazar,
+                    Kumartuli, Ahiritola, Shobhabazar Rajbari, Hatibagan to Maniktala. Timeless, soulful, crowded with
+                    love.</p>
+                <p class="text-xs text-coco/55 mt-4 tracking-wide">11 STOPS · ~7.8 KM · 3 AUTO STANDS</p>
+                <span class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-maroon">Open North trail <span
+                        aria-hidden="true">→</span></span>
+            </a>
+
+            <!-- South -->
+            <a href="south_kolkata_durga_puja_pandal_hopping_route_map_by_DDas.html"
+                class="reveal card-lift rounded-2xl bg-cream p-6 border border-maroon/15 flex flex-col"
+                style="transition-delay:.1s">
+                <span
+                    class="w-11 h-11 rounded-full bg-gold/15 border border-gold/40 flex items-center justify-center text-2xl">✨</span>
+                <h3 class="font-serif font-bold text-2xl text-maroon-deep mt-3">South Kolkata</h3>
+                <p class="font-bengali text-maroon-soft/70 text-sm mt-0.5">থিম ও আলোর উৎসব</p>
+                <p class="text-sm text-coco/75 leading-relaxed mt-3 flex-1">Grand theme pujas &amp; sparkling avenues —
+                    Deshapriya Park, Ballygunge, Gariahat and beyond. Bold art, bright lights, big crowds.</p>
+                <p class="text-xs text-coco/55 mt-4 tracking-wide">CURATED STOPS · WALKING TRAIL · AUTO GUIDE</p>
+                <span class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-maroon">Open South trail <span
+                        aria-hidden="true">→</span></span>
+            </a>
+
+            <!-- South 2.0 -->
+            <a href="south_kolkata_pandal_hopping_plan_2_0_route_map.html"
+                class="reveal card-lift rounded-2xl bg-cream p-6 border border-maroon/15 flex flex-col"
+                style="transition-delay:.15s">
+                <span
+                    class="w-11 h-11 rounded-full bg-maroon/10 border border-maroon/20 flex items-center justify-center text-2xl">🌙</span>
+                <h3 class="font-serif font-bold text-2xl text-maroon-deep mt-3">South Plan 2.0</h3>
+                <p class="font-bengali text-maroon-soft/70 text-sm mt-0.5">বিকেলের বিশেষ পরিক্রমা</p>
+                <p class="text-sm text-coco/75 leading-relaxed mt-3 flex-1">An alternate South trail — a re-ordered
+                    evening-friendly circuit for a second night of hopping, or when you want a quieter flow.</p>
+                <p class="text-xs text-coco/55 mt-4 tracking-wide">ALTERNATE ROUTE · EVENING CIRCUIT</p>
+                <span class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-maroon">Open Plan 2.0 <span
+                        aria-hidden="true">→</span></span>
+            </a>
+        </div>
+    </main>
+
+    <!-- How it works -->
+    <section id="how" class="border-y border-gold/30 bg-cream/70">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+            <div class="text-center reveal">
+                <p class="text-[11px] tracking-[0.28em] uppercase text-gold-dark font-medium">Simple as dhaaker taale
+                    paa melaano</p>
+                <h2 class="font-serif font-bold text-3xl sm:text-4xl text-maroon-deep mt-2">How it works</h2>
+                <div class="gold-rule mt-4 text-gold-dark text-sm"><span>✦</span></div>
+            </div>
+            <div class="grid sm:grid-cols-3 gap-5 mt-10">
+                <div class="reveal rounded-2xl bg-ivory border border-gold/40 p-6 text-center">
+                    <span
+                        class="mx-auto w-11 h-11 rounded-full bg-maroon text-gold-pale font-serif font-bold text-lg flex items-center justify-center">১</span>
+                    <h3 class="font-serif font-bold text-xl text-maroon-deep mt-4">Pick a trail</h3>
+                    <p class="text-sm text-coco/70 mt-2 leading-relaxed">Choose North, South or South Plan 2.0. Each
+                        opens with stops in perfect walking order.</p>
+                </div>
+                <div class="reveal rounded-2xl bg-ivory border border-gold/40 p-6 text-center"
+                    style="transition-delay:.07s">
+                    <span
+                        class="mx-auto w-11 h-11 rounded-full bg-maroon text-gold-pale font-serif font-bold text-lg flex items-center justify-center">২</span>
+                    <h3 class="font-serif font-bold text-xl text-maroon-deep mt-4">Walk with the live map</h3>
+                    <p class="text-sm text-coco/70 mt-2 leading-relaxed">Follow the walking polyline, tick off pandals
+                        as you visit, and get step-by-step directions per leg.</p>
+                </div>
+                <div class="reveal rounded-2xl bg-ivory border border-gold/40 p-6 text-center"
+                    style="transition-delay:.14s">
+                    <span
+                        class="mx-auto w-11 h-11 rounded-full bg-maroon text-gold-pale font-serif font-bold text-lg flex items-center justify-center">৩</span>
+                    <h3 class="font-serif font-bold text-xl text-maroon-deep mt-4">Shortcut by shared auto</h3>
+                    <p class="text-sm text-coco/70 mt-2 leading-relaxed">Long leg? Tap the 🛺 markers for boarding
+                        points, fares and time saved on fixed auto routes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cultural quote -->
+    <section class="bg-maroon-deep text-ivory relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.12] alpana-bg"></div>
+        <div class="relative max-w-3xl mx-auto px-4 sm:px-6 py-14 sm:py-20 text-center">
+            <p class="text-gold-light text-2xl tracking-widest">❁</p>
+            <blockquote class="reveal font-serif text-2xl sm:text-3xl leading-snug mt-4">
+                “Dhaaker taale, shiuli phooler gandhe —<br class="hidden sm:block" />
+                the city remembers how to come home.”
+            </blockquote>
+            <p class="font-bengali text-gold-pale/80 mt-4">ঢাকের তালে, শিউলি ফুলের গন্ধে — শহর ফিরে আসে ঘরে।</p>
+            <div
+                class="frame-double inline-block rounded-xl bg-white/5 px-6 py-4 mt-8 text-sm text-ivory/85 leading-relaxed">
+                🪔 &nbsp;From <em class="font-serif">Mahalaya</em> mornings to <em class="font-serif">Dashami</em>
+                evenings —<br class="sm:hidden" />
+                may every pandal greet you with light.
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips -->
+    <section id="tips" class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div class="text-center reveal">
+            <p class="text-[11px] tracking-[0.28em] uppercase text-gold-dark font-medium">Pandal-hopping wisdom</p>
+            <h2 class="font-serif font-bold text-3xl sm:text-4xl text-maroon-deep mt-2">Puja Tips</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 text-sm">
+            <div class="reveal rounded-2xl border border-maroon/15 bg-cream p-5">
+                <p class="text-xl">🌅</p>
+                <h3 class="font-semibold text-maroon-deep mt-2">Go early or late</h3>
+                <p class="text-coco/70 mt-1.5 leading-relaxed">Saptami–Ashtami evenings are heaviest. Mornings and
+                    post-10pm nights are kinder for walking.</p>
+            </div>
+            <div class="reveal rounded-2xl border border-maroon/15 bg-cream p-5" style="transition-delay:.05s">
+                <p class="text-xl">👟</p>
+                <h3 class="font-semibold text-maroon-deep mt-2">Wear walking shoes</h3>
+                <p class="text-coco/70 mt-1.5 leading-relaxed">Trails run 7–8 km. Comfortable footwear, water, and a
+                    small bag for bhog coupons.</p>
+            </div>
+            <div class="reveal rounded-2xl border border-maroon/15 bg-cream p-5" style="transition-delay:.1s">
+                <p class="text-xl">🛺</p>
+                <h3 class="font-semibold text-maroon-deep mt-2">Keep auto change ready</h3>
+                <p class="text-coco/70 mt-1.5 leading-relaxed">Shared autos take ₹10–12 exact cash or UPI. Board at the
+                    marked stands, not mid-road.</p>
+            </div>
+            <div class="reveal rounded-2xl border border-maroon/15 bg-cream p-5" style="transition-delay:.15s">
+                <p class="text-xl">📱</p>
+                <h3 class="font-semibold text-maroon-deep mt-2">Save battery &amp; data</h3>
+                <p class="text-coco/70 mt-1.5 leading-relaxed">Keep the trail tab open — progress is remembered. “Leg 1
+                    / Leg 2” buttons open GPS instantly.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About / Credit -->
+    <section id="about" class="border-t border-gold/30 bg-cream/70">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12 text-center">
+            <span
+                class="inline-flex w-12 h-12 rounded-full bg-maroon text-gold-pale items-center justify-center text-2xl shadow">🪔</span>
+            <h2 class="font-serif font-bold text-2xl sm:text-3xl text-maroon-deep mt-4">Crafted with love for the city
+            </h2>
+            <p class="text-coco/75 text-[15px] leading-relaxed mt-3">
+                <strong class="font-serif text-lg text-maroon-deep">Amader Durga Puja</strong> is a platform created on the initiative of 
+                <strong class="text-maroon-deep">Debasmita Das</strong>, mapping beloved pandal circuits so friends,
+                family and first-time visitors can experience Kolkata’s greatest festival on foot, without missing a beat.
+            </p>
+            <p class="font-bengali text-maroon-soft/80 mt-3">সবার পূজা ভালো কাটুক — শুভেচ্ছা রইল।</p>
+            <a href="#trails"
+                class="btn-maroon inline-flex items-center gap-2 bg-maroon hover:bg-maroon-soft text-ivory font-medium px-7 py-3 rounded-full text-[15px] mt-6">
+                Begin your parikrama <span aria-hidden="true">→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-maroon-deep text-ivory/85">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid gap-8 sm:grid-cols-3 text-sm">
+            <div>
+                <p class="font-serif font-bold text-lg text-gold-pale">🪔 Amader Durga Puja</p>
+                <p class="text-ivory/65 mt-2 leading-relaxed">Kolkata pandal-hopping trails with live walking routes
+                    &amp; auto shortcuts.</p>
+                <p class="text-[12px] tracking-[0.18em] uppercase text-gold-light/80 mt-3">by Debasmita Das</p>
+            </div>
+            <div>
+                <p class="font-semibold text-gold-pale tracking-wide">Trails</p>
+                <ul class="mt-3 space-y-2 text-ivory/75">
+                    <li><a href="north_kolkata_durga_puja_pandal_hopping_route_map_by_DDas.html"
+                            class="hover:text-gold-light transition">🏛️ North Kolkata</a></li>
+                    <li><a href="south_kolkata_durga_puja_pandal_hopping_route_map_by_DDas.html"
+                            class="hover:text-gold-light transition">✨ South Kolkata</a></li>
+                    <li><a href="south_kolkata_pandal_hopping_plan_2_0_route_map.html"
+                            class="hover:text-gold-light transition">🌙 South Plan 2.0</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="font-semibold text-gold-pale tracking-wide">Sharodiya wishes</p>
+                <p class="font-bengali text-ivory/75 mt-3">শুভ শারদীয়া!</p>
+                <p class="text-ivory/60 mt-1 leading-relaxed">Walk safe, stay hydrated, and let the dhak guide you home.
+                </p>
+            </div>
+        </div>
+        <div class="border-t border-white/10">
+            <div
+                class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-ivory/50">
+                <span>© <span id="year">2026</span> Amader Durga Puja · Routes handcrafted by Debasmita Das ·
+                    Orchastrated by Tilak Sadhukhan</span>
+                <span class="tracking-[0.2em] uppercase">শুভ শারদীয়া · Kolkata</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const setMenu = (open) => {
+            mobileMenu.classList.toggle('hidden', !open);
+            menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        };
+        menuBtn.addEventListener('click', () => setMenu(mobileMenu.classList.contains('hidden')));
+        mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+
+        // Reveal on scroll
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+        // Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

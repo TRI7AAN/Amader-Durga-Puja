@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Amader Durga Puja South Kolkata Route &amp; Live Guide</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <!-- Leaflet for fallback & hybrid mapping -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Tiro+Bangla:ital@0;1&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: '#FDF8EE',
+            cream: '#FFFDF6',
+            maroon: { DEFAULT: '#7A1C1C', deep: '#4A0E0E', soft: '#9B2C2C' },
+            gold: { DEFAULT: '#C99A2B', light: '#E8C86A', pale: '#F7E8B8', dark: '#9A7418' },
+            coco: '#3A2420'
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            bengali: ['"Tiro Bangla"', 'serif'],
+            sans: ['Jost', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Jost', system-ui, sans-serif;
+      background-color: #FDF8EE;
+      color: #3A2420;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Subtle alpana-dot texture */
+    .alpana-bg {
+      background-image: radial-gradient(rgba(201,154,43,0.14) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .hero-glow {
+      background:
+        radial-gradient(ellipse 60% 45% at 50% 0%, rgba(232,200,106,0.35), transparent 70%),
+        radial-gradient(ellipse 40% 30% at 50% 20%, rgba(155,44,44,0.08), transparent 70%);
+    }
+    /* Gold double rule with centre motif */
+    .gold-rule {
+      display: flex; align-items: center; gap: 0.9rem;
+      justify-content: center;
+    }
+    .gold-rule::before, .gold-rule::after {
+      content: ""; height: 1px; width: 72px;
+      background: linear-gradient(90deg, transparent, #C99A2B);
+    }
+    .gold-rule::after {
+      background: linear-gradient(90deg, #C99A2B, transparent);
+    }
+    .card-lift { transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease; }
+    .card-lift:hover { transform: translateY(-6px); box-shadow: 0 24px 48px -18px rgba(74,14,14,.28); border-color: #C99A2B; }
+    .btn-maroon { transition: transform .25s ease, box-shadow .25s ease, background .25s ease; }
+    .btn-maroon:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -12px rgba(122,28,28,.55); }
+    .btn-gold { transition: transform .25s ease, box-shadow .25s ease; }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -12px rgba(201,154,43,.6); }
+    /* Diya flame flicker */
+    @keyframes flicker {
+      0%,100% { transform: scale(1) rotate(-1.5deg); opacity: 1; }
+      50% { transform: scale(1.06) rotate(1.5deg); opacity: .92; }
+    }
+    .flame { display:inline-block; animation: flicker 2.6s ease-in-out infinite; transform-origin: 50% 90%; }
+    /* Gentle reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    /* Thin decorative border frame for quote */
+    .frame-double { outline: 1px solid rgba(232,200,106,.5); outline-offset: 6px; }
+    ::selection { background: #7A1C1C; color: #FDF8EE; }
+    #map { height: 100%; width: 100%; min-height: 0; z-index: 10; background: #FDF8EE; }
+    .custom-pin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      font-weight: 800;
+      font-size: 11px;
+      color: #FFFDF6;
+      box-shadow: 0 4px 10px rgba(74,14,14,0.35);
+      border: 2px solid #C99A2B;
+      transition: transform 0.2s ease;
+    }
+    .custom-pin:hover {
+      transform: scale(1.15);
+    }
+    .auto-pin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      font-size: 14px;
+      background: #C99A2B;
+      color: #FFFDF6;
+      box-shadow: 0 4px 12px rgba(201, 154, 43, 0.5);
+      border: 2px solid #F7E8B8;
+      transition: transform 0.2s ease;
+    }
+    .auto-pin:hover {
+      transform: scale(1.2);
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      padding: 2px;
+      background: #FFFDF6;
+      color: #3A2420;
+      border: 1px solid rgba(201,154,43,0.4);
+      box-shadow: 0 10px 25px -5px rgba(74, 14, 14, 0.25);
+    }
+    .leaflet-popup-content {
+      margin: 10px 12px;
+      line-height: 1.4;
+      color: #3A2420;
+    }
+    .leaflet-popup-tip { background: #FFFDF6; border: 1px solid rgba(201,154,43,0.4); }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #FDF8EE; }
+    ::-webkit-scrollbar-thumb { background: #C99A2B; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9A7418; }
+    /* ---- Mobile-first Chrome experience: stable viewport panes, no sideways scroll, 40px+ touch targets ---- */
+    html, body { overflow-x: clip; }
+    body { min-height: 100vh; min-height: 100dvh; -webkit-tap-highlight-color: rgba(122,28,28,.18); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    #map { min-height: 0; touch-action: pan-x pan-y; background: #F7E8B8; }
+    .map-pane { height: 54svh; min-height: 340px; max-height: 560px; }
+    .stops-pane { height: 62svh; min-height: 360px; max-height: 620px; }
+    @media (min-width: 1024px) {
+      .map-pane, .stops-pane { height: calc(100vh - 150px); height: calc(100dvh - 150px); min-height: 430px; max-height: none; }
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    /* Touch targets that survive JS className swaps */
+    #gmapsPart1Link, #gmapsPart2Link, #toggleAutoStandsBtn, #openNavGuideBtn, #fitBoundsBtn, #trafficBtn { min-height: 40px; }
+    [id^="mode"] { min-height: 36px; flex-shrink: 0; }
+    #drawerPrevBtn, #drawerNextBtn, #closeDrawerBtn { min-width: 44px; min-height: 40px; }
+    #drawerTabWalk, #drawerTabAuto { min-height: 38px; }
+    #filterAllBtn, #filterRemainingBtn { min-height: 36px; }
+    #drawerWalkContent, #drawerAutoContent { max-height: 30svh; }
+    #stopsListContainer [data-nav-idx] { min-height: 36px; padding: 8px 12px !important; font-size: 12px !important; display: inline-flex; align-items: center; }
+    #stopsListContainer [data-toggle-key] { width: 36px; height: 36px; font-size: 15px; }
+    #inAppGuideDrawer { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+    footer { padding-bottom: env(safe-area-inset-bottom); }
+    @media (pointer: coarse) {
+      .leaflet-bar a { width: 40px !important; height: 40px !important; line-height: 40px !important; font-size: 20px !important; }
+      .leaflet-popup-content a { padding: 10px 16px !important; font-size: 13px !important; }
+    }
+    .gm-style-iw a[href] { display: inline-block !important; padding: 10px 16px !important; font-size: 13px !important; }
+    @media (prefers-reduced-motion: reduce) {
+      .card-lift, .card-lift:hover { transform: none; }
+    }
+  </style>
+</head>
+<body class="bg-ivory text-coco min-h-screen flex flex-col">
+
+  <!-- Auspicious top strip -->
+  <div class="bg-maroon-deep text-gold-pale text-center text-[11px] sm:text-xs tracking-[0.18em] sm:tracking-[0.25em] uppercase py-2 px-3 leading-relaxed">
+    শুভ শারদীয়া &nbsp;·&nbsp; South Kolkata Puja Trail &nbsp;·&nbsp; 2026
+  </div>
+
+  <!-- Heritage Header -->
+  <header class="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-gold/30 px-4 py-3 shrink-0">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2.5 group">
+        <span class="w-10 h-10 rounded-full bg-maroon text-gold-pale flex items-center justify-center text-xl shadow-md ring-1 ring-gold/60 group-hover:scale-105 transition">🪔</span>
+        <span class="leading-tight">
+          <span class="block font-serif font-bold text-lg sm:text-xl text-maroon-deep tracking-wide">South Kolkata Puja Trail</span>
+          <span class="block font-bengali text-[13px] text-maroon-soft/80">থিম ও আলোর উৎসব</span>
+          <span class="block text-[10px] tracking-[0.2em] uppercase text-gold-dark">Exact Street Paths · Auto Guide</span>
+        </span>
+      </a>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <nav class="flex items-center gap-4 text-sm tracking-wide text-coco/80 mr-1">
+          <a href="index.html" class="hover:text-maroon font-medium transition">Home</a>
+          <a href="north_kolkata_durga_puja_pandal_hopping_route_map_by_DDas.html" class="hover:text-maroon font-medium transition">North</a>
+          <a href="south_kolkata_pandal_hopping_plan_2_0_route_map.html" class="hover:text-maroon font-medium transition">Plan 2.0</a>
+        </nav>
+        <div class="flex items-center bg-cream border border-gold/40 p-1 rounded-full text-xs max-w-full overflow-x-auto no-scrollbar">
+          <button id="modeLoopBtn" class="px-3 py-1.5 rounded-full font-semibold transition bg-maroon text-ivory shadow-sm">
+            Loop (8.1 km)
+          </button>
+          <button id="modeOriginalBtn" class="px-3 py-1.5 rounded-full font-semibold transition text-maroon hover:bg-gold/20">
+            Classic (9.4 km)
+          </button>
+          <button id="modeMidDhabaBtn" class="px-3 py-1.5 rounded-full font-semibold transition text-maroon hover:bg-gold/20">
+            Mid-Dhaba (7.2 km)
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Heritage Sub-Bar: Stats & Quick Toggles -->
+  <section class="bg-cream/70 border-b border-gold/30 px-4 py-2 shrink-0">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div class="flex items-center gap-2">
+        <span id="routeStatsBadge" class="font-bold bg-maroon text-gold-pale px-2.5 py-1 rounded-full border border-gold/40">
+          8.1 km • 13 Stops • Exact Street Paths
+        </span>
+        <span id="mapEngineBadge" class="text-coco/70 font-medium hidden sm:inline-flex items-center gap-1">
+          <span id="engineDot" class="w-2 h-2 rounded-full bg-blue-500"></span>
+          <span id="engineLabel">OpenStreetMap</span>
+        </span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-1.5">
+        <a id="gmapsPart1Link" href="#" target="_blank" rel="noopener noreferrer" class="btn-maroon px-2.5 py-1.5 rounded-full font-semibold bg-maroon hover:bg-maroon-soft text-ivory transition shadow-sm flex items-center gap-1" title="Open Leg 1 in Google Maps">
+          <span>🗺️ Leg 1 in Google Maps</span>
+        </a>
+        <a id="gmapsPart2Link" href="#" target="_blank" rel="noopener noreferrer" class="btn-gold px-2.5 py-1.5 rounded-full font-semibold bg-gold-pale border border-gold text-maroon-deep hover:bg-gold-light/50 transition shadow-sm flex items-center gap-1" title="Open Leg 2 in Google Maps">
+          <span>🗺️ Leg 2 in Google Maps</span>
+        </a>
+
+        <button id="toggleAutoStandsBtn" class="btn-gold px-2.5 py-1.5 rounded-full font-semibold bg-gold-pale border border-gold text-maroon-deep hover:bg-gold-light/50 transition shadow-sm flex items-center gap-1">
+          <span>🛺</span> <span>Auto Stands &amp; Routes</span>
+        </button>
+
+        <button id="openNavGuideBtn" class="btn-gold px-2.5 py-1.5 rounded-full font-semibold bg-gold-pale border border-gold text-maroon-deep hover:bg-gold-light/50 transition flex items-center gap-1">
+          <span>🧭</span> <span>Live Leg Guide</span>
+        </button>
+
+        <button id="fitBoundsBtn" class="px-2.5 py-1.5 rounded-full font-medium bg-cream border border-gold/50 text-maroon-deep hover:bg-gold/20 transition" title="Center Full Route">
+          🎯 Center
+        </button>
+
+        <button id="trafficBtn" class="px-2.5 py-1.5 rounded-full font-medium bg-cream border border-gold/50 text-maroon-deep hover:bg-gold/20 transition" title="Toggle Live Traffic">
+          🚦 Traffic
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main View: Interactive Map & Stops List -->
+  <main class="flex-1 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-3 p-3 min-h-0 alpana-bg">
+    
+    <!-- Map Container -->
+    <div class="lg:col-span-7 xl:col-span-8 flex flex-col bg-cream rounded-2xl shadow-sm border border-maroon/15 overflow-hidden map-pane relative">
+      <div id="map" class="h-full w-full"></div>
+
+      <!-- Map Legend Pill -->
+      <div class="absolute top-3 left-3 bg-cream/95 backdrop-blur-sm border border-gold/40 rounded-2xl shadow-sm px-3 py-1.5 z-20 text-[10px] sm:text-[11px] flex flex-wrap items-center gap-x-3 gap-y-1 max-w-[calc(100%-1.5rem)]">
+        <span class="inline-flex items-center gap-1.5 text-maroon-deep font-medium" title="Live exact walking geometry from Google Maps Directions API">
+          <span class="w-3 h-1 bg-maroon rounded-full inline-block"></span> Google Walk Path
+        </span>
+        <span class="inline-flex items-center gap-1.5 text-maroon-deep font-medium">
+          <span class="w-3 h-1 bg-gold rounded-full inline-block"></span> Auto Route
+        </span>
+        <span class="inline-flex items-center gap-1 text-maroon font-semibold">
+          <span>🛺</span> Auto Stand
+        </span>
+      </div>
+
+      <!-- In-App Turn-by-Turn & Auto Guide Drawer -->
+      <div id="inAppGuideDrawer" class="absolute bottom-3 left-3 right-3 max-w-lg mx-auto bg-cream/95 backdrop-blur-md rounded-2xl shadow-xl border border-gold/40 p-3 z-30 transition-all duration-200">
+        <div class="flex items-center justify-between pb-2 border-b border-gold/30">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-maroon text-gold-pale" id="drawerLegBadge">Leg 1</span>
+            <h4 class="font-serif font-bold text-sm text-maroon-deep truncate" id="drawerLegTitle">Rabindra Sarobar Metro ➔ Mudiali Club</h4>
+          </div>
+          <div class="flex items-center gap-1 shrink-0">
+            <button id="drawerPrevBtn" class="px-1.5 py-1 rounded-full bg-cream border border-gold/50 hover:bg-gold/20 text-maroon-deep text-xs font-bold" title="Previous Leg">◀</button>
+            <button id="drawerNextBtn" class="px-1.5 py-1 rounded-full bg-cream border border-gold/50 hover:bg-gold/20 text-maroon-deep text-xs font-bold" title="Next Leg">▶</button>
+            <button id="closeDrawerBtn" class="p-1 text-coco/50 hover:text-maroon text-xs font-bold ml-1">&times;</button>
+          </div>
+        </div>
+
+        <!-- Mode Tabs: Walk Steps vs Auto Stand -->
+        <div class="flex items-center gap-2 mt-2">
+          <button id="drawerTabWalk" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-maroon text-ivory shadow-xs">
+            🚶 Walk Steps (<span id="drawerWalkDist">290 m • 4m</span>)
+          </button>
+          <button id="drawerTabAuto" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-cream border border-gold/50 hover:bg-gold/20 text-maroon-deep flex items-center gap-1">
+            <span>🛺</span> <span id="drawerAutoLabel">Auto Option</span>
+          </button>
+        </div>
+
+        <!-- Walk Steps Content -->
+        <div id="drawerWalkContent" class="mt-2 text-xs max-h-36 overflow-y-auto space-y-1 pr-1">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Auto Stand Content -->
+        <div id="drawerAutoContent" class="hidden mt-2 text-xs max-h-36 overflow-y-auto space-y-2 pr-1">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Stops Sidebar -->
+    <div class="lg:col-span-5 xl:col-span-4 flex flex-col bg-cream rounded-2xl shadow-sm border border-maroon/15 overflow-hidden stops-pane">
+      
+      <!-- Progress Bar Header -->
+      <div class="p-3 bg-cream border-b border-gold/30 shrink-0">
+        <div class="flex items-center justify-between text-xs font-semibold text-coco/80 mb-1.5">
+          <span class="text-coco/70">Visited Pandals</span>
+          <span id="progressCounter" class="text-maroon font-bold">0 / 13</span>
+        </div>
+        <div class="w-full h-1.5 bg-gold/20 rounded-full overflow-hidden">
+          <div id="progressBar" class="h-full bg-gradient-to-r from-maroon to-gold transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <div class="flex items-center justify-between mt-2">
+          <div class="inline-flex p-0.5 bg-gold/20 border border-gold/30 rounded-full text-[11px]">
+            <button id="filterAllBtn" class="px-2 py-0.5 rounded-full font-semibold bg-maroon text-ivory shadow-sm">All</button>
+            <button id="filterRemainingBtn" class="px-2 py-0.5 rounded-full font-medium text-maroon hover:bg-gold/20">Remaining</button>
+          </div>
+          <button id="resetProgressBtn" class="text-[11px] text-coco/60 hover:text-maroon font-medium transition">
+            Reset Checks
+          </button>
+        </div>
+      </div>
+
+      <!-- Clean Stops Timeline -->
+      <div id="stopsListContainer" class="flex-1 overflow-y-auto divide-y divide-maroon/10 p-2 space-y-1.5 bg-ivory/50"></div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-maroon-deep text-ivory/85 mt-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid gap-8 sm:grid-cols-3 text-sm">
+      <div>
+        <p class="font-serif font-bold text-lg text-gold-pale">🪔 Amader Durga Puja</p>
+        <p class="text-ivory/65 mt-2 leading-relaxed">South Kolkata trail with live walking routes &amp; auto shortcuts.</p>
+        <p class="text-[12px] tracking-[0.18em] uppercase text-gold-light/80 mt-3">by Debasmita Das</p>
+      </div>
+      <div>
+        <p class="font-semibold text-gold-pale tracking-wide">Trails</p>
+        <ul class="mt-3 space-y-2 text-ivory/75">
+          <li><a href="index.html" class="hover:text-gold-light transition">🪔 Home</a></li>
+          <li><a href="north_kolkata_durga_puja_pandal_hopping_route_map_by_DDas.html" class="hover:text-gold-light transition">🏛️ North Kolkata</a></li>
+          <li><a href="south_kolkata_durga_puja_pandal_hopping_route_map_by_DDas.html" class="hover:text-gold-light transition">✨ South Kolkata</a></li>
+          <li><a href="south_kolkata_pandal_hopping_plan_2_0_route_map.html" class="hover:text-gold-light transition">🌙 South Plan 2.0</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-semibold text-gold-pale tracking-wide">Sharodiya wishes</p>
+        <p class="font-bengali text-ivory/75 mt-3">শুভ শারদীয়া!</p>
+        <p class="text-ivory/60 mt-1 leading-relaxed">Walk safe, stay hydrated, and let the dhak guide you home.</p>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-ivory/50">
+        <span>© <span id="year">2026</span> Amader Durga Puja · Crafted by Debasmita Das</span>
+        <span class="tracking-[0.2em] uppercase">শুভ শারদীয়া · South Kolkata</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Google Maps API key is configured in code only (DEFAULT_API_KEY). No in-app key editor. -->
+
+  <script>
+    // Embedded Exact Street Routing Data (Precomputed OSRM road geometry & turn steps)
+    const STREET_ROUTES = {"metro_mudiali":{"distance":565,"duration":1,"coordinates":[[22.507886,88.345547],[22.507832,88.345545],[22.5074,88.345539],[22.507248,88.345526],[22.507244,88.345461],[22.507242,88.345432],[22.507239,88.345368],[22.507536,88.345384],[22.507908,88.345397],[22.508096,88.345412],[22.508153,88.345413],[22.508565,88.345421],[22.509156,88.345467],[22.509152,88.345495],[22.509148,88.345538],[22.509144,88.345567],[22.509143,88.345582],[22.509136,88.345644],[22.509041,88.346396],[22.509361,88.346595],[22.509529,88.346676],[22.509601,88.346695],[22.509782,88.346745],[22.510064,88.346762],[22.510118,88.346499],[22.510135,88.346306]],"steps":[{"instruction":"depart onto Deshapran Sashmal Road","distance":"71 m"},{"instruction":"continue uturn onto Deshapran Sashmal Road","distance":"229 m"},{"instruction":"turn right onto Sarat Chatterjee Avenue","distance":"96 m"},{"instruction":"turn left onto SR Das Road","distance":"122 m"}]},"mudiali_shibmandir":{"distance":374,"duration":1,"coordinates":[[22.510135,88.346306],[22.510118,88.346499],[22.510064,88.346762],[22.510031,88.346872],[22.510004,88.346978],[22.50998,88.347072],[22.50997,88.347221],[22.509984,88.347359],[22.509994,88.34742],[22.510004,88.347491],[22.510042,88.347673],[22.510104,88.347954],[22.510147,88.348241],[22.510659,88.348258],[22.511341,88.348266],[22.511579,88.34829],[22.511684,88.348324]],"steps":[{"instruction":"end of road left onto Lake Place","distance":"171 m"},{"instruction":"arrive right onto Lake Place","distance":"0 m"}]},"shibmandir_ballygunge":{"distance":1183,"duration":2,"coordinates":[[22.511684,88.348324],[22.511707,88.348331],[22.512073,88.34846],[22.512341,88.348552],[22.512728,88.348674],[22.512997,88.348758],[22.513213,88.348848],[22.513589,88.348971],[22.513969,88.349098],[22.514242,88.349194],[22.514347,88.34923],[22.514459,88.349266],[22.514548,88.349307],[22.51463,88.349358],[22.514677,88.349394],[22.514725,88.349451],[22.514829,88.349515],[22.515183,88.349728],[22.515461,88.349883],[22.515695,88.350025],[22.5159,88.350262],[22.516247,88.350601],[22.516294,88.350742],[22.516419,88.351522],[22.516573,88.352484],[22.516587,88.352566],[22.516704,88.353263],[22.516727,88.353405],[22.516807,88.353877],[22.516833,88.354035],[22.516856,88.354169],[22.516966,88.354795],[22.516977,88.354893],[22.517089,88.35556],[22.516662,88.355616],[22.51636,88.355643],[22.516201,88.355657]],"steps":[{"instruction":"depart right onto Lake Place","distance":"514 m"},{"instruction":"new name straight onto Jatin Das Road","distance":"571 m"},{"instruction":"turn right onto Lake View Road","distance":"99 m"},{"instruction":"arrive left onto Lake View Road","distance":"0 m"}]},"ballygunge_hindustan":{"distance":778,"duration":2,"coordinates":[[22.516201,88.355657],[22.516028,88.355673],[22.516072,88.356208],[22.516093,88.356396],[22.516148,88.356865],[22.516154,88.357175],[22.516163,88.357537],[22.516188,88.357868],[22.516262,88.35825],[22.516311,88.358705],[22.516317,88.358756],[22.516322,88.358806],[22.516331,88.35889],[22.516402,88.359387],[22.516419,88.359492],[22.51655,88.360285],[22.516569,88.360407],[22.516571,88.360579],[22.516567,88.360772],[22.516551,88.360921],[22.516508,88.36121],[22.51708,88.361483],[22.517564,88.361602],[22.517691,88.361633],[22.517716,88.36207]],"steps":[{"instruction":"depart left onto Lake View Road","distance":"19 m"},{"instruction":"turn left onto Jadunath Sarkar Road","distance":"575 m"},{"instruction":"turn left onto Hindustan Park Road","distance":"139 m"},{"instruction":"continue right onto Hindustan Park","distance":"45 m"},{"instruction":"arrive onto Hindustan Park","distance":"0 m"}]},"hindustan_singhi":{"distance":908,"duration":2,"coordinates":[[22.517716,88.36207],[22.517691,88.361633],[22.517968,88.361715],[22.518115,88.361752],[22.518428,88.361877],[22.518681,88.361926],[22.518974,88.361998],[22.519024,88.361994],[22.519055,88.361992],[22.519083,88.361987],[22.519139,88.362373],[22.51916,88.362515],[22.519232,88.362898],[22.519281,88.363156],[22.519317,88.363372],[22.519436,88.364077],[22.519464,88.364241],[22.519509,88.364561],[22.519578,88.364852],[22.519671,88.365128],[22.519889,88.365066],[22.520305,88.364956],[22.520449,88.364952],[22.520696,88.364939],[22.520834,88.364944],[22.520971,88.364948],[22.521004,88.364083],[22.521006,88.36384],[22.52101,88.363567],[22.521042,88.363275],[22.521056,88.363115],[22.521095,88.362841],[22.521103,88.362742]],"steps":[{"instruction":"depart onto Hindustan Park","distance":"45 m"},{"instruction":"continue right onto Hindustan Park","distance":"147 m"},{"instruction":"end of road right onto Rash Behari Avenue","distance":"342 m"},{"instruction":"turn left onto Gariahat Road","distance":"146 m"},{"instruction":"turn left onto Dover Lane","distance":"228 m"},{"instruction":"arrive left onto Dover Lane","distance":"0 m"}]},"singhi_ekdalia":{"distance":1125,"duration":2,"coordinates":[[22.521103,88.362742],[22.521095,88.362841],[22.521056,88.363115],[22.520774,88.363095],[22.520587,88.363088],[22.520317,88.363093],[22.520018,88.363099],[22.51975,88.363123],[22.519641,88.363131],[22.519281,88.363156],[22.519317,88.363372],[22.519436,88.364077],[22.519464,88.364241],[22.519509,88.364561],[22.519578,88.364852],[22.519671,88.365128],[22.519746,88.365339],[22.519779,88.36543],[22.519984,88.365985],[22.520471,88.367163],[22.520526,88.367295],[22.520668,88.367629],[22.520861,88.368092],[22.52095,88.368317],[22.521028,88.368508],[22.521085,88.368646],[22.521114,88.368716],[22.52116,88.36884],[22.521201,88.368977],[22.521259,88.368796],[22.521281,88.368716],[22.521258,88.36858],[22.521243,88.368449],[22.521237,88.368301],[22.521231,88.36813],[22.521249,88.367925],[22.52123,88.367787],[22.521232,88.367641],[22.521232,88.367529],[22.521209,88.367379],[22.521218,88.367167],[22.521241,88.366693],[22.521223,88.366562]],"steps":[{"instruction":"depart right onto Dover Lane","distance":"39 m"},{"instruction":"turn left onto Rash Behari Avenue","distance":"639 m"},{"instruction":"turn uturn onto Ekdalia Road","distance":"251 m"}]},"ekdalia_tridhara":{"distance":1452,"duration":3,"coordinates":[[22.521223,88.366562],[22.521212,88.366487],[22.521194,88.366213],[22.521192,88.3661],[22.521034,88.365934],[22.520966,88.365746],[22.52097,88.365702],[22.520974,88.365535],[22.520984,88.365361],[22.520971,88.365178],[22.520834,88.365169],[22.520583,88.365161],[22.520319,88.365213],[22.520303,88.365196],[22.520281,88.365201],[22.520062,88.365245],[22.519746,88.365339],[22.519695,88.365355],[22.519663,88.365365],[22.519641,88.365372],[22.519557,88.365161],[22.519465,88.364876],[22.519392,88.364573],[22.519353,88.364328],[22.519276,88.363855],[22.519229,88.363603],[22.519192,88.3634],[22.519149,88.363167],[22.519113,88.362926],[22.519077,88.362684],[22.519024,88.362329],[22.518974,88.361998],[22.518848,88.361287],[22.518689,88.360225],[22.51874,88.360223],[22.518775,88.360222],[22.518826,88.36022],[22.51941,88.360187],[22.51948,88.360156],[22.519509,88.360122],[22.519532,88.36],[22.519449,88.35964],[22.51937,88.358955],[22.519322,88.358465],[22.519284,88.35771],[22.519264,88.357187],[22.51928,88.357008],[22.519323,88.35679],[22.519407,88.356552],[22.519468,88.356417],[22.519497,88.356353],[22.519686,88.356058],[22.519722,88.356015],[22.519798,88.355922],[22.519842,88.35586],[22.519787,88.355771],[22.519677,88.355531],[22.519591,88.355483],[22.519525,88.355449]],"steps":[{"instruction":"turn left onto Gariahat Road","distance":"139 m"},{"instruction":"turn right onto Rash Behari Avenue","distance":"553 m"},{"instruction":"turn right onto Mahanirban Road","distance":"106 m"},{"instruction":"fork slight left onto Mahanirban Road","distance":"446 m"},{"instruction":"end of road left onto Aswini Dutta Road","distance":"39 m"},{"instruction":"continue left onto Aswini Dutta Road","distance":"19 m"},{"instruction":"arrive onto Aswini Dutta Road","distance":"0 m"}]},"tridhara_deshapriya":{"distance":237,"duration":1,"coordinates":[[22.51952,88.355447],[22.519378,88.355391],[22.519307,88.355399],[22.519123,88.355418],[22.518771,88.355454],[22.518709,88.354892],[22.518694,88.35476],[22.518683,88.354664],[22.518627,88.354062],[22.518695,88.354047]],"steps":[{"instruction":"depart onto Aswini Dutta Road","distance":"85 m"}]},"deshapriya_pally23":{"distance":1670,"duration":4,"coordinates":[[22.518695,88.354047],[22.519229,88.353926],[22.519217,88.353823],[22.519195,88.353598],[22.519191,88.35353],[22.519167,88.353085],[22.519141,88.352813],[22.519122,88.352359],[22.519118,88.352098],[22.519128,88.352001],[22.519324,88.35197],[22.519658,88.351914],[22.519762,88.351893],[22.519985,88.35186],[22.520512,88.351761],[22.520618,88.351741],[22.52074,88.351714],[22.520798,88.351701],[22.520881,88.351682],[22.521414,88.351628],[22.521469,88.351317],[22.521482,88.351252],[22.521494,88.35117],[22.521518,88.351032],[22.521551,88.350869],[22.521578,88.350763],[22.521619,88.350594],[22.521647,88.350444],[22.521774,88.34981],[22.521804,88.349686],[22.521876,88.349433],[22.521894,88.349355],[22.52195,88.349149],[22.521972,88.349045],[22.521988,88.348968],[22.522003,88.348876],[22.522038,88.348756],[22.522057,88.348693],[22.522064,88.348599],[22.522077,88.348283],[22.522088,88.348105],[22.522109,88.34792],[22.522148,88.347716],[22.522156,88.347679],[22.522221,88.347469],[22.522265,88.347303],[22.522319,88.347204],[22.522299,88.347032],[22.522285,88.346885],[22.522257,88.346736],[22.522218,88.346694],[22.522236,88.346557],[22.522587,88.346517],[22.522849,88.346491],[22.523038,88.346472],[22.523366,88.346444],[22.523558,88.346431],[22.523582,88.34643],[22.523652,88.346427],[22.523797,88.346422],[22.523982,88.346432],[22.52423,88.346435],[22.52451,88.346423],[22.524752,88.346407],[22.524852,88.346401],[22.525446,88.346361],[22.525577,88.346354],[22.525531,88.346031],[22.525481,88.345696],[22.525476,88.345612],[22.525471,88.345595],[22.525372,88.344739],[22.525365,88.344688],[22.525324,88.344385],[22.525306,88.344251],[22.525557,88.344208]],"steps":[{"instruction":"turn left onto Motilal Nehru Road","distance":"189 m"},{"instruction":"turn right onto Lansdowne Road (Sarat Bose Road)","distance":"266 m"},{"instruction":"turn left onto Manohar Pukur Road","distance":"523 m"},{"instruction":"end of road right onto Shyama Prasad Mukherjee Road","distance":"385 m"},{"instruction":"turn left onto Basanta Bose Road","distance":"219 m"}]},"pally23_sanghasree":{"distance":712,"duration":2,"coordinates":[[22.525557,88.344208],[22.525306,88.344251],[22.525303,88.344233],[22.525297,88.344192],[22.525262,88.343865],[22.524912,88.343885],[22.524808,88.343883],[22.524594,88.343904],[22.524256,88.343924],[22.524141,88.34393],[22.523819,88.343906],[22.523809,88.343906],[22.523643,88.343901],[22.52354,88.343912],[22.52344,88.34393],[22.523425,88.343811],[22.523423,88.343803],[22.52338,88.343811],[22.523256,88.343824],[22.523132,88.343865],[22.523076,88.343877],[22.522892,88.343916],[22.522741,88.343932],[22.52257,88.343949],[22.522458,88.343925],[22.522458,88.34431],[22.522455,88.344367],[22.522443,88.344605],[22.522421,88.344892],[22.522418,88.344911],[22.522369,88.345187],[22.522262,88.345474],[22.521991,88.345413],[22.521884,88.345407],[22.521755,88.345399],[22.521422,88.34538],[22.521297,88.345379],[22.521281,88.3456],[22.521263,88.345866]],"steps":[{"instruction":"turn right onto Basanta Bose Road","distance":"40 m"},{"instruction":"turn left onto Harish Mukherjee Road","distance":"191 m"},{"instruction":"end of road right onto Hazra Road","distance":"24 m"},{"instruction":"turn left onto Gurupada Halder Road","distance":"109 m"},{"instruction":"turn left onto Mahim Halder Street","distance":"162 m"},{"instruction":"turn right onto Sadananda Road","distance":"108 m"},{"instruction":"turn left onto Halder Para Lane","distance":"50 m"},{"instruction":"arrive onto Halder Para Lane","distance":"0 m"}]},"sanghasree_badamtala":{"distance":638,"duration":1,"coordinates":[[22.521263,88.345866],[22.521281,88.3456],[22.521297,88.345379],[22.521091,88.345378],[22.520796,88.345407],[22.520732,88.345413],[22.520496,88.345434],[22.520226,88.345402],[22.520142,88.345392],[22.520046,88.345379],[22.51981,88.345351],[22.51978,88.345348],[22.519757,88.345345],[22.519443,88.3453],[22.519422,88.345298],[22.519234,88.345287],[22.519077,88.345276],[22.518858,88.345249],[22.51873,88.345233],[22.518563,88.345207],[22.518365,88.345181],[22.518164,88.345168],[22.518115,88.345162],[22.517981,88.345132],[22.51791,88.345102],[22.517828,88.345083],[22.517397,88.345024],[22.517416,88.344881],[22.517466,88.344696],[22.517522,88.344535],[22.517661,88.344313],[22.517777,88.343987],[22.517864,88.343777],[22.517891,88.343741],[22.517963,88.343754]],"steps":[{"instruction":"depart onto Halder Para Lane","distance":"50 m"},{"instruction":"turn left onto Sadananda Road","distance":"435 m"},{"instruction":"turn right onto Nepal Battacharjee Street","distance":"144 m"}]},"badamtala_bachans":{"distance":221,"duration":1,"coordinates":[[22.517963,88.343754],[22.517891,88.343741],[22.517864,88.343777],[22.517777,88.343987],[22.517661,88.344313],[22.517522,88.344535],[22.517466,88.344696],[22.517416,88.344881],[22.517397,88.345024],[22.516996,88.345009],[22.517017,88.345244]],"steps":[{"instruction":"turn left onto Nepal Battacharjee Street","distance":"144 m"},{"instruction":"end of road right onto Sadananda Road","distance":"44 m"},{"instruction":"turn left onto Rash Behari Avenue","distance":"24 m"},{"instruction":"arrive left onto Rash Behari Avenue","distance":"0 m"}]},"shibmandir_badamtala":{"distance":1043,"duration":2,"coordinates":[[22.511684,88.348324],[22.511707,88.348331],[22.512073,88.34846],[22.512341,88.348552],[22.512728,88.348674],[22.512997,88.348758],[22.513277,88.348029],[22.513515,88.347572],[22.513767,88.347197],[22.514033,88.34689],[22.514231,88.346661],[22.514642,88.346272],[22.514877,88.346083],[22.514992,88.345984],[22.515024,88.345955],[22.515107,88.345884],[22.515186,88.345796],[22.515201,88.345654],[22.51525,88.345239],[22.515289,88.344998],[22.515316,88.344744],[22.515488,88.344795],[22.515692,88.344852],[22.516012,88.344906],[22.516244,88.344958],[22.516614,88.344976],[22.516877,88.345004],[22.516996,88.345009],[22.517397,88.345024],[22.517416,88.344881],[22.517466,88.344696],[22.517522,88.344535],[22.517661,88.344313],[22.517777,88.343987],[22.517864,88.343777],[22.517891,88.343741],[22.517963,88.343754]],"steps":[{"instruction":"depart right onto Lake Place","distance":"152 m"},{"instruction":"turn left onto Dr. Meghnad Saha Road","distance":"506 m"},{"instruction":"turn right onto Sadananda Road","distance":"233 m"},{"instruction":"turn left onto Nepal Battacharjee Street","distance":"144 m"},{"instruction":"turn right","distance":"8 m"},{"instruction":"arrive","distance":"0 m"}]},"badamtala_sanghasree":{"distance":638,"duration":1,"coordinates":[[22.517963,88.343754],[22.517891,88.343741],[22.517864,88.343777],[22.517777,88.343987],[22.517661,88.344313],[22.517522,88.344535],[22.517466,88.344696],[22.517416,88.344881],[22.517397,88.345024],[22.517828,88.345083],[22.51791,88.345102],[22.517981,88.345132],[22.518115,88.345162],[22.518164,88.345168],[22.518365,88.345181],[22.518563,88.345207],[22.51873,88.345233],[22.518858,88.345249],[22.519077,88.345276],[22.519234,88.345287],[22.519422,88.345298],[22.519443,88.3453],[22.519757,88.345345],[22.51978,88.345348],[22.51981,88.345351],[22.520046,88.345379],[22.520142,88.345392],[22.520226,88.345402],[22.520496,88.345434],[22.520732,88.345413],[22.520796,88.345407],[22.521091,88.345378],[22.521297,88.345379],[22.521281,88.3456],[22.521263,88.345866]],"steps":[{"instruction":"depart","distance":"8 m"},{"instruction":"turn left onto Nepal Battacharjee Street","distance":"144 m"},{"instruction":"end of road left onto Sadananda Road","distance":"435 m"},{"instruction":"turn right onto Halder Para Lane","distance":"50 m"},{"instruction":"arrive onto Halder Para Lane","distance":"0 m"}]},"sanghasree_pally23":{"distance":757,"duration":2,"coordinates":[[22.521263,88.345866],[22.521281,88.3456],[22.521297,88.345379],[22.521422,88.34538],[22.521755,88.345399],[22.521884,88.345407],[22.521991,88.345413],[22.522262,88.345474],[22.522459,88.345504],[22.522636,88.34557],[22.523013,88.345688],[22.523147,88.345696],[22.523206,88.345699],[22.523494,88.345683],[22.523568,88.345686],[22.523561,88.3455],[22.523519,88.344854],[22.523507,88.344651],[22.523467,88.344173],[22.52344,88.34393],[22.52354,88.343912],[22.523643,88.343901],[22.523809,88.343906],[22.523819,88.343906],[22.524141,88.34393],[22.524256,88.343924],[22.524594,88.343904],[22.524808,88.343883],[22.524912,88.343885],[22.525262,88.343865],[22.525297,88.344192],[22.525303,88.344233],[22.525306,88.344251],[22.525557,88.344208]],"steps":[{"instruction":"depart onto Halder Para Lane","distance":"50 m"},{"instruction":"turn right onto Sadananda Road","distance":"255 m"},{"instruction":"end of road left onto Hazra Road","distance":"181 m"},{"instruction":"turn right onto Harish Mukherjee Road","distance":"202 m"},{"instruction":"turn right onto Basanta Bose Road","distance":"40 m"},{"instruction":"turn left","distance":"28 m"},{"instruction":"arrive left","distance":"0 m"}]},"pally23_deshapriya":{"distance":1692,"duration":4,"coordinates":[[22.525557,88.344208],[22.525306,88.344251],[22.525324,88.344385],[22.525365,88.344688],[22.525372,88.344739],[22.525471,88.345595],[22.525476,88.345612],[22.525481,88.345696],[22.525531,88.346031],[22.525577,88.346354],[22.525589,88.346467],[22.525482,88.346481],[22.525274,88.346495],[22.524955,88.346517],[22.524739,88.346532],[22.524504,88.346544],[22.524244,88.346548],[22.524099,88.346556],[22.523988,88.346562],[22.5238,88.346572],[22.523657,88.346577],[22.523557,88.34658],[22.523541,88.346581],[22.523142,88.346602],[22.522683,88.346634],[22.522218,88.346694],[22.522047,88.346718],[22.52203,88.346719],[22.521318,88.346777],[22.520573,88.346635],[22.520546,88.346845],[22.520511,88.347131],[22.520486,88.347339],[22.520454,88.347603],[22.520431,88.347813],[22.520375,88.348232],[22.520359,88.348349],[22.520302,88.348666],[22.520238,88.348934],[22.520181,88.349233],[22.520138,88.349381],[22.520117,88.349429],[22.520094,88.349452],[22.520065,88.349468],[22.520023,88.349474],[22.519988,88.349475],[22.519962,88.349479],[22.519946,88.349492],[22.519931,88.34953],[22.519869,88.349804],[22.519848,88.349897],[22.51983,88.349928],[22.519798,88.349957],[22.519745,88.349967],[22.519653,88.349967],[22.519443,88.349963],[22.519397,88.350174],[22.519339,88.350515],[22.519281,88.350861],[22.51922,88.351373],[22.519179,88.351575],[22.519128,88.352001],[22.519118,88.352098],[22.519122,88.352359],[22.519141,88.352813],[22.519167,88.353085],[22.519191,88.35353],[22.519195,88.353598],[22.519217,88.353823],[22.519229,88.353926],[22.518695,88.354047]],"steps":[{"instruction":"depart right","distance":"28 m"},{"instruction":"turn left onto Basanta Bose Road","distance":"219 m"},{"instruction":"end of road right onto Shyama Prasad Mukherjee Road","distance":"570 m"},{"instruction":"turn left onto Nakuleshwar Bhattacherjee Road","distance":"404 m"},{"instruction":"end of road left onto Bipin Pal Road","distance":"213 m"},{"instruction":"new name straight onto Motilal Nehru Road","distance":"199 m"},{"instruction":"turn right","distance":"60 m"},{"instruction":"arrive right","distance":"0 m"}]},"deshapriya_tridhara":{"distance":237,"duration":1,"coordinates":[[22.518695,88.354047],[22.518627,88.354062],[22.518683,88.354664],[22.518694,88.35476],[22.518709,88.354892],[22.518771,88.355454],[22.519123,88.355418],[22.519307,88.355399],[22.519378,88.355391],[22.51952,88.355447]],"steps":[{"instruction":"depart right","distance":"8 m"},{"instruction":"turn left","distance":"144 m"},{"instruction":"end of road left onto Manohar Pukur Road","distance":"68 m"},{"instruction":"fork slight right onto Aswini Dutta Road","distance":"17 m"},{"instruction":"arrive onto Aswini Dutta Road","distance":"0 m"}]},"tridhara_ballygunge":{"distance":370,"duration":1,"coordinates":[[22.51952,88.355447],[22.519378,88.355391],[22.519307,88.355399],[22.519123,88.355418],[22.518771,88.355454],[22.518694,88.355462],[22.518489,88.355483],[22.518252,88.355505],[22.517966,88.355529],[22.517929,88.355534],[22.517896,88.355538],[22.517832,88.355546],[22.51749,88.355552],[22.517089,88.35556],[22.516662,88.355616],[22.51636,88.355643],[22.516201,88.355657]],"steps":[{"instruction":"depart onto Aswini Dutta Road","distance":"17 m"},{"instruction":"new name slight left onto Manohar Pukur Road","distance":"157 m"},{"instruction":"new name straight onto Lake View Road","distance":"196 m"},{"instruction":"arrive left onto Lake View Road","distance":"0 m"}]},"ekdalia_bachans":{"distance":2469,"duration":5,"coordinates":[[22.521223,88.366562],[22.521212,88.366487],[22.521194,88.366213],[22.521192,88.3661],[22.521034,88.365934],[22.520966,88.365746],[22.52097,88.365702],[22.520974,88.365535],[22.520984,88.365361],[22.520971,88.365178],[22.520834,88.365169],[22.520583,88.365161],[22.520319,88.365213],[22.520303,88.365196],[22.520281,88.365201],[22.520062,88.365245],[22.519746,88.365339],[22.519695,88.365355],[22.519663,88.365365],[22.519641,88.365372],[22.519557,88.365161],[22.519465,88.364876],[22.519392,88.364573],[22.519353,88.364328],[22.519276,88.363855],[22.519229,88.363603],[22.519192,88.3634],[22.519149,88.363167],[22.519113,88.362926],[22.519077,88.362684],[22.519024,88.362329],[22.518974,88.361998],[22.518848,88.361287],[22.518689,88.360225],[22.518571,88.359627],[22.518375,88.358523],[22.51808,88.357015],[22.518041,88.356811],[22.517918,88.356064],[22.517832,88.355546],[22.517756,88.355098],[22.51768,88.354649],[22.517608,88.354223],[22.517424,88.353125],[22.517309,88.35244],[22.517292,88.352341],[22.517265,88.35217],[22.517232,88.351962],[22.517208,88.35181],[22.51715,88.351442],[22.517063,88.350891],[22.516833,88.349225],[22.516808,88.34902],[22.516795,88.348844],[22.516764,88.348401],[22.516897,88.347741],[22.516941,88.347492],[22.516979,88.347199],[22.516995,88.346918],[22.516977,88.346452],[22.51697,88.346255],[22.516956,88.3459],[22.516951,88.345847],[22.516946,88.345805],[22.516944,88.345786],[22.516941,88.345758],[22.516933,88.34569],[22.516917,88.345489],[22.516877,88.345004],[22.516996,88.345009],[22.517017,88.345244]],"steps":[{"instruction":"depart","distance":"152 m"},{"instruction":"turn left onto Gariahat Road","distance":"139 m"},{"instruction":"turn right onto Rash Behari Avenue","distance":"2141 m"},{"instruction":"continue uturn onto Rash Behari Avenue","distance":"38 m"},{"instruction":"arrive left onto Rash Behari Avenue","distance":"0 m"}]},"bachans_sanghasree":{"distance":591,"duration":1,"coordinates":[[22.517017,88.345244],[22.517059,88.34571],[22.517669,88.345825],[22.517794,88.345848],[22.518,88.345885],[22.518187,88.345919],[22.51847,88.345971],[22.518605,88.345992],[22.518743,88.346028],[22.519145,88.346133],[22.519366,88.34619],[22.519651,88.346264],[22.519761,88.346293],[22.520009,88.346351],[22.520325,88.346426],[22.520565,88.346475],[22.520751,88.346512],[22.521213,88.346581],[22.521237,88.346257],[22.521243,88.346166],[22.521254,88.345966],[22.521261,88.34589],[22.521263,88.345866]],"steps":[{"instruction":"depart left onto Rash Behari Avenue","distance":"48 m"},{"instruction":"turn left onto Shyama Prasad Mukherjee Road","distance":"469 m"},{"instruction":"turn left onto Halder Para Lane","distance":"74 m"},{"instruction":"arrive onto Halder Para Lane","distance":"0 m"}]}};
+
+    // Auto Stands & Transit Routes
+    const AUTO_STANDS = [
+      {
+        id: 'auto_southern',
+        name: 'Southern Avenue Auto Stand',
+        badge: '🛺',
+        lat: 22.51268,
+        lng: 88.34965,
+        route: 'Lake Market ➔ Golpark / Gariahat',
+        appliesToLegs: ['shibmandir_ballygunge', 'mudiali_ballygunge'],
+        pickupDesc: 'Outside Lake Temple Rd on Southern Ave (2 min walk from Shib Mandir)',
+        dropDesc: 'Get down at Lake View Rd crossing (walk 80m south to Ballygunge Cultural)',
+        fare: '₹10 - ₹12',
+        timeSaved: 'Saves ~12 min walk across Southern Ave',
+        path: [
+          [22.51165, 88.34845],
+          [22.51268, 88.34965],
+          [22.51350, 88.35180],
+          [22.51445, 88.35400],
+          [22.51520, 88.35560],
+          [22.51621, 88.35580]
+        ]
+      },
+      {
+        id: 'auto_priya',
+        name: 'Priya Cinema / Deshapriya Auto Stand',
+        badge: '🛺',
+        lat: 22.51865,
+        lng: 88.35190,
+        route: 'Rashbehari ➔ Kalighat Metro ➔ Hazra / Harish Mukherjee Rd',
+        appliesToLegs: ['deshapriya_pally23'],
+        pickupDesc: 'Rashbehari Ave outside Priya Cinema (120m west of Deshapriya Park)',
+        dropDesc: 'Get down at Harish Mukherjee Rd / Jatin Das Park crossing (right outside 23 Pally)',
+        fare: '₹12 - ₹15',
+        timeSaved: 'Saves ~18 min walk across Hazra',
+        path: [
+          [22.51858, 88.35346],
+          [22.51865, 88.35190],
+          [22.51810, 88.34750],
+          [22.51730, 88.34530],
+          [22.52100, 88.34480],
+          [22.52553, 88.34403]
+        ]
+      },
+      {
+        id: 'auto_gariahat',
+        name: 'Gariahat Under-Flyover Auto Stand',
+        badge: '🛺',
+        lat: 22.52040,
+        lng: 88.36380,
+        route: 'Gariahat Crossing ➔ Kalighat Metro (Bachan\'s Dhaba)',
+        appliesToLegs: ['ekdalia_bachans', 'singhi_bachans'],
+        pickupDesc: 'Westbound auto queue under Gariahat Flyover (250m from Ekdalia)',
+        dropDesc: 'Kalighat Metro Gate 1 / Rashbehari crossing (steps from Bachan\'s Dhaba)',
+        fare: '₹15',
+        timeSaved: 'Saves 35-40 min long transit trek',
+        path: [
+          [22.52121, 88.36656],
+          [22.52040, 88.36380],
+          [22.51880, 88.35500],
+          [22.51730, 88.34530]
+        ]
+      }
+    ];
+
+    // Places Data (Concise & Uncluttered)
+    const PLACES = {
+      metro: {
+        id: 'metro',
+        name: 'Rabindra Sarobar Metro',
+        color: '#2563eb',
+        lat: 22.5078864,
+        lng: 88.3455571,
+        address: 'SP Mukherjee Rd, Gate 4'
+      },
+      mudiali: {
+        id: 'mudiali',
+        name: 'Mudiali Club',
+        color: '#7A1C1C',
+        lat: 22.5102047,
+        lng: 88.3463133,
+        address: '37, SR Das Rd, Kalighat'
+      },
+      shibmandir: {
+        id: 'shibmandir',
+        name: 'Shib Mandir Sarbojanin',
+        color: '#7A1C1C',
+        lat: 22.51165,
+        lng: 88.34845,
+        address: '25, Lake Temple Rd, Kalighat'
+      },
+      badamtala: {
+        id: 'badamtala',
+        name: 'Badamtala Ashar Sangha',
+        color: '#9B2C2C',
+        lat: 22.5179668,
+        lng: 88.3437245,
+        address: 'Nepal Bhattacharya St, Kalighat'
+      },
+      sanghasree: {
+        id: 'sanghasree',
+        name: 'Sanghasree (Kalighat)',
+        color: '#9B2C2C',
+        lat: 22.5212538,
+        lng: 88.3458653,
+        address: '114 Gurupada Haldar Rd'
+      },
+      pally23: {
+        id: 'pally23',
+        name: '23 Pally Durga Mandir',
+        color: '#9B2C2C',
+        lat: 22.525531,
+        lng: 88.3440311,
+        address: '109 Harish Mukherjee Rd'
+      },
+      deshapriya: {
+        id: 'deshapriya',
+        name: 'Deshapriya Park',
+        color: '#9A7418',
+        lat: 22.5185819,
+        lng: 88.3534607,
+        address: 'Motilal Nehru Rd'
+      },
+      tridhara: {
+        id: 'tridhara',
+        name: 'Tridhara Sammilani',
+        color: '#9A7418',
+        lat: 22.5195286,
+        lng: 88.3554398,
+        address: '107 Manoharpukur Rd'
+      },
+      ballygunge: {
+        id: 'ballygunge',
+        name: 'Ballygunge Cultural',
+        color: '#9A7418',
+        lat: 22.5162122,
+        lng: 88.3558059,
+        address: '20 Lake View Rd'
+      },
+      hindustan: {
+        id: 'hindustan',
+        name: 'Hindustan Park',
+        color: '#9A7418',
+        lat: 22.5176792,
+        lng: 88.3620716,
+        address: 'Gol Park, Hindustan Park'
+      },
+      singhi: {
+        id: 'singhi',
+        name: 'Singhi Park',
+        color: '#9A7418',
+        lat: 22.5209489,
+        lng: 88.3627281,
+        address: 'Ramani Chatterjee Rd, Dover Ln'
+      },
+      ekdalia: {
+        id: 'ekdalia',
+        name: 'Ekdalia Evergreen',
+        color: '#9A7418',
+        lat: 22.5212187,
+        lng: 88.3665629,
+        address: '15 Ekdalia Rd, Gariahat'
+      },
+      bachans: {
+        id: 'bachans',
+        name: "Bachan's Dhaba",
+        color: '#059669',
+        lat: 22.517126,
+        lng: 88.3452326,
+        address: 'Rash Behari Ave (Kalighat Metro)'
+      }
+    };
+
+    // Routes
+    const ROUTES = {
+      loop: {
+        title: 'Loop',
+        stats: '8.1 km • 13 Stops • Zero Backtracking',
+        part1Url: 'https://www.google.com/maps/dir/Rabindra+Sarobor,+Shyama+Prasad+Mukherjee+Rd,+Charu+Market,+Kalighat,+Kolkata,+West+Bengal+700033,+India/Mudiali+Club,+37,+SR+Das+Rd,+Mudiali,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Shibmandir+Sarbojanin+Durgotsab+Samiti,+25,+Lake+Temple+Rd,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Ballygunge+Cultural+Association+Durga+Puja,+20,+Lake+View+Rd,+lake+Terrace,+Kalighat,+Kolkata,+West+Bengal+700029,+India/Hindusthan+Park+Sarbojanin+Durgotsab+Committee,+51%2F1,+Gol+Park,+Dhakuria,+Hindustan+Park,+Gariahat,+Kolkata,+West+Bengal+700029,+India/Singhi+Park+Sarbojanin+Durga+Puja+Committee,+18%2F33,+5+Ramani+Chatterjee,+Dover+Ln,+Ballygunge,+Kolkata,+West+Bengal+700029,+India/Ekdalia+Evergreen+Club,+15,+Ekdalia+Rd,+Ekdalia,+Ballygunge,+Kolkata,+West+Bengal+700019,+India/',
+        part2Url: 'https://www.google.com/maps/dir/Ekdalia+Evergreen+Club,+15,+Ekdalia+Rd,+Ekdalia,+Ballygunge,+Kolkata,+West+Bengal+700019,+India/Tridhara+Sammilani,+107,+Manoharpukur,+Kalighat,+Kolkata,+West+Bengal+700029,+India/Deshapriya+Park,+Motilal+Nehru+Rd,+Manoharpukur,+Kalighat,+Kolkata,+West+Bengal+700029,+India/23+Pally+Durga+Temple,+109,+Harish+Mukherjee+Rd,+Bhowanipore,+Kolkata,+West+Bengal+700026,+India/Sanghasree,+114,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Badamtala+Ashar+Sangha+Durgotsab,+18-17,+Nepal+Bhattacharya+St,+Anami+Sangha,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Bachan\'s+Dhaba,+T39A,+Rash+Behari+Ave,+P.O,+Kalighat,+Kolkata,+West+Bengal+700026,+India/',
+        stops: [
+          { key: 'metro', badge: 'START', leg: 'Start Point (Blue Line Metro)' },
+          { key: 'mudiali', badge: '1', leg: '290 m • 4 min walk', autoStand: null },
+          { key: 'shibmandir', badge: '2', leg: '400 m • 6 min walk', autoStand: null },
+          { key: 'ballygunge', badge: '3', leg: '1.1 km • 16 min walk', autoStand: 'auto_southern' },
+          { key: 'hindustan', badge: '4', leg: '750 m • 11 min walk', autoStand: null },
+          { key: 'singhi', badge: '5', leg: '500 m • 7 min walk', autoStand: null },
+          { key: 'ekdalia', badge: '6', leg: '350 m • 5 min walk', autoStand: null },
+          { key: 'tridhara', badge: '7', leg: '1.3 km • 18 min walk', autoStand: null },
+          { key: 'deshapriya', badge: '8', leg: '290 m • 4 min walk', autoStand: null },
+          { key: 'pally23', badge: '9', leg: '1.5 km • 20 min walk', autoStand: 'auto_priya' },
+          { key: 'sanghasree', badge: '10', leg: '650 m • 9 min walk', autoStand: null },
+          { key: 'badamtala', badge: '11', leg: '600 m • 8 min walk', autoStand: null },
+          { key: 'bachans', badge: '🍽️', leg: '220 m • 3 min walk (Kalighat Metro)', autoStand: null }
+        ]
+      },
+      original: {
+        title: 'Classic',
+        stats: '9.4 km • 13 Stops',
+        part1Url: 'https://www.google.com/maps/dir/Rabindra+Sarobor,+Shyama+Prasad+Mukherjee+Rd,+Charu+Market,+Kalighat,+Kolkata,+West+Bengal+700033,+India/Mudiali+Club,+37,+SR+Das+Rd,+Mudiali,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Shibmandir+Sarbojanin+Durgotsab+Samiti,+25,+Lake+Temple+Rd,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Badamtala+Ashar+Sangha+Durgotsab,+18-17,+Nepal+Bhattacharya+St,+Anami+Sangha,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Sanghasree,+114,+Kalighat,+Kolkata,+West+Bengal+700026,+India/23+Pally+Durga+Temple,+109,+Harish+Mukherjee+Rd,+Bhowanipore,+Kolkata,+West+Bengal+700026,+India/Deshapriya+Park,+Motilal+Nehru+Rd,+Manoharpukur,+Kalighat,+Kolkata,+West+Bengal+700029,+India/',
+        part2Url: 'https://www.google.com/maps/dir/Deshapriya+Park,+Motilal+Nehru+Rd,+Manoharpukur,+Kalighat,+Kolkata,+West+Bengal+700029,+India/Tridhara+Sammilani,+107,+Manoharpukur,+Kalighat,+Kolkata,+West+Bengal+700029,+India/Ballygunge+Cultural+Association+Durga+Puja,+20,+Lake+View+Rd,+lake+Terrace,+Kalighat,+Kolkata,+West+Bengal+700029,+India/Hindusthan+Park+Sarbojanin+Durgotsab+Committee,+51%2F1,+Gol+Park,+Dhakuria,+Hindustan+Park,+Gariahat,+Kolkata,+West+Bengal+700029,+India/Singhi+Park+Sarbojanin+Durga+Puja+Committee,+18%2F33,+5+Ramani+Chatterjee,+Dover+Ln,+Ballygunge,+Kolkata,+West+Bengal+700029,+India/Ekdalia+Evergreen+Club,+15,+Ekdalia+Rd,+Ekdalia,+Ballygunge,+Kolkata,+West+Bengal+700019,+India/Bachan\'s+Dhaba,+T39A,+Rash+Behari+Ave,+P.O,+Kalighat,+Kolkata,+West+Bengal+700026,+India/',
+        stops: [
+          { key: 'metro', badge: 'START', leg: 'Start Point (Blue Line Metro)' },
+          { key: 'mudiali', badge: '1', leg: '290 m • 4 min walk', autoStand: null },
+          { key: 'shibmandir', badge: '2', leg: '400 m • 6 min walk', autoStand: null },
+          { key: 'badamtala', badge: '3', leg: '1.2 km • 17 min walk', autoStand: null },
+          { key: 'sanghasree', badge: '4A', leg: '700 m • 10 min walk', autoStand: null },
+          { key: 'pally23', badge: '4B', leg: '650 m • 9 min walk', autoStand: null },
+          { key: 'deshapriya', badge: '5', leg: '1.5 km • 20 min walk', autoStand: null },
+          { key: 'tridhara', badge: '6', leg: '290 m • 4 min walk', autoStand: null },
+          { key: 'ballygunge', badge: '7', leg: '350 m • 5 min walk', autoStand: null },
+          { key: 'hindustan', badge: '8', leg: '750 m • 11 min walk', autoStand: null },
+          { key: 'singhi', badge: '9', leg: '500 m • 7 min walk', autoStand: null },
+          { key: 'ekdalia', badge: '10', leg: '350 m • 5 min walk', autoStand: null },
+          { key: 'bachans', badge: '🍽️', leg: '4.2 km • Auto/Cab back to Kalighat', autoStand: 'auto_gariahat' }
+        ]
+      },
+      midDhaba: {
+        title: 'Mid-Dhaba',
+        stats: '7.2 km • 13 Stops',
+        part1Url: 'https://www.google.com/maps/dir/Rabindra+Sarobor,+Shyama+Prasad+Mukherjee+Rd,+Charu+Market,+Kalighat,+Kolkata,+West+Bengal+700033,+India/Mudiali+Club,+37,+SR+Das+Rd,+Mudiali,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Shibmandir+Sarbojanin+Durgotsab+Samiti,+25,+Lake+Temple+Rd,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Badamtala+Ashar+Sangha+Durgotsab,+18-17,+Nepal+Bhattacharya+St,+Anami+Sangha,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Bachan\'s+Dhaba,+T39A,+Rash+Behari+Ave,+P.O,+Kalighat,+Kolkata,+West+Bengal+700026,+India/Sanghasree,+114,+Kalighat,+Kolkata,+West+Bengal+700026,+India/23+Pally+Durga+Temple,+109,+Harish+Mukherjee+Rd,+Bhowanipore,+Kolkata,+West+Bengal+700026,+India/',
+        part2Url: 'https://www.google.com/maps/dir/23+Pally+Durga+Temple,+109,+Harish+Mukherjee+Rd,+Bhowanipore,+Kolkata,+West+Bengal+700026,+India/Deshapriya+Park,+Motilal+Nehru+Rd,+Manoharpukur,+Kalighat,+Kolkata,+West+Bengal+700029,+India/Tridhara+Sammilani,+107,+Manoharpukur,+Kalighat,+Kolkata,+West+Bengal+700029,+India/Ballygunge+Cultural+Association+Durga+Puja,+20,+Lake+View+Rd,+lake+Terrace,+Kalighat,+Kolkata,+West+Bengal+700029,+India/Hindusthan+Park+Sarbojanin+Durgotsab+Committee,+51%2F1,+Gol+Park,+Dhakuria,+Hindustan+Park,+Gariahat,+Kolkata,+West+Bengal+700029,+India/Singhi+Park+Sarbojanin+Durga+Puja+Committee,+18%2F33,+5+Ramani+Chatterjee,+Dover+Ln,+Ballygunge,+Kolkata,+West+Bengal+700029,+India/Ekdalia+Evergreen+Club,+15,+Ekdalia+Rd,+Ekdalia,+Ballygunge,+Kolkata,+West+Bengal+700019,+India/',
+        stops: [
+          { key: 'metro', badge: 'START', leg: 'Start Point (Blue Line Metro)' },
+          { key: 'mudiali', badge: '1', leg: '290 m • 4 min walk', autoStand: null },
+          { key: 'shibmandir', badge: '2', leg: '400 m • 6 min walk', autoStand: null },
+          { key: 'badamtala', badge: '3', leg: '1.2 km • 17 min walk', autoStand: null },
+          { key: 'bachans', badge: '🍽️', leg: '220 m • 3 min walk', autoStand: null },
+          { key: 'sanghasree', badge: '4A', leg: '500 m • 7 min walk', autoStand: null },
+          { key: 'pally23', badge: '4B', leg: '650 m • 9 min walk', autoStand: null },
+          { key: 'deshapriya', badge: '5', leg: '1.5 km • 20 min walk', autoStand: null },
+          { key: 'tridhara', badge: '6', leg: '290 m • 4 min walk', autoStand: null },
+          { key: 'ballygunge', badge: '7', leg: '350 m • 5 min walk', autoStand: null },
+          { key: 'hindustan', badge: '8', leg: '750 m • 11 min walk', autoStand: null },
+          { key: 'singhi', badge: '9', leg: '500 m • 7 min walk', autoStand: null },
+          { key: 'ekdalia', badge: '10', leg: '350 m • 5 min walk', autoStand: null }
+        ]
+      }
+    };
+
+    // State
+    let currentMode = 'loop';
+    let filterMode = 'all';
+    let checkedStops = {};
+    // Google Maps API key is hardcoded here (no in-app key editor).
+    const DEFAULT_API_KEY = 'AIzaSyB2uk4pozly0FnLYTtcUo23Sd3A6zIt3hc';
+    const gmapsApiKey = DEFAULT_API_KEY;
+    let currentProvider = 'google';
+    let showTraffic = false;
+    let showAutoStands = true;
+    let currentLegIndex = 1; // 1-indexed (metro to mudiali is 1)
+
+    try {
+      const saved = localStorage.getItem('sk_pujo_checked_2026');
+      if (saved) checkedStops = JSON.parse(saved);
+    } catch (e) {
+      checkedStops = {};
+    }
+
+    function saveChecked() {
+      try {
+        localStorage.setItem('sk_pujo_checked_2026', JSON.stringify(checkedStops));
+      } catch (e) {}
+    }
+
+    // Map instances
+    let gmap = null;
+    let gmapMarkers = {};
+    let gmapAutoMarkers = [];
+    let gmapWalkPolylines = [];
+    let gmapAutoPolylines = [];
+    let gmapTrafficLayer = null;
+    let gmapInfoWindow = null;
+
+    let leafletMap = null;
+    let leafletMarkers = {};
+    let leafletAutoMarkers = [];
+    let leafletWalkPolylines = [];
+    let leafletAutoPolylines = [];
+    let leafletGroup = null;
+
+    // ---- Exact Google walking-route engine (replaces straight lines) ----
+    let directionsService = null;
+    let exactWalkCache = {};
+    let exactFetchToken = 0;
+    function stripGoogleHtml(html) { try { const d = document.createElement('div'); d.innerHTML = html || ''; return (d.textContent || d.innerText || '').trim(); } catch (e) { return String(html || '').replace(/<[^>]+>/g, ''); } }
+    function getDirectionsService() { if (!directionsService && window.google && window.google.maps) { try { directionsService = new google.maps.DirectionsService(); } catch (e) {} } return directionsService; }
+    function currentLegKey() { try { const route = ROUTES[currentMode]; const a = route.stops[currentLegIndex - 1], b = route.stops[currentLegIndex]; return a.key + '_' + b.key; } catch (e) { return ''; } }
+    function updateStatsWithExact() {
+      try {
+        const route = ROUTES[currentMode]; let total = 0, got = 0;
+        for (let i = 0; i < route.stops.length - 1; i++) { const k = route.stops[i].key + '_' + route.stops[i + 1].key; const e = exactWalkCache[k]; if (e && e.distanceValue) { total += e.distanceValue; got++; } }
+        if (got > 0) {
+          const el = document.getElementById('routeStatsBadge');
+          const base = route.stats || '';
+          const km = (total / 1000).toFixed(1);
+          if (el) el.textContent = base + ' • Live walk: ' + km + ' km (' + got + '/' + (route.stops.length - 1) + ' legs)';
+        }
+      } catch (e) {}
+    }
+    function scheduleGoogleLeg(fromP, toP, legKey, legIdx, token) {
+      if (exactWalkCache[legKey] && exactWalkCache[legKey].source === 'google') return;
+      setTimeout(() => {
+        if (token !== exactFetchToken) return;
+        const svc = getDirectionsService(); if (!svc) return;
+        svc.route({ origin: { lat: fromP.lat, lng: fromP.lng }, destination: { lat: toP.lat, lng: toP.lng }, travelMode: (window.google && google.maps.TravelMode) ? google.maps.TravelMode.WALKING : 'WALKING' }, (result, status) => {
+          if (token !== exactFetchToken) return;
+          if (status === 'OK' && result && result.routes && result.routes[0]) {
+            const r = result.routes[0]; let detailed = []; const gSteps = [];
+            try {
+              r.legs.forEach(leg => { (leg.steps || []).forEach(st => { (st.path || []).forEach(p => { try { detailed.push({ lat: p.lat(), lng: p.lng() }); } catch (e) {} }); gSteps.push({ instruction: stripGoogleHtml(st.instructions), distance: (st.distance && st.distance.text) || '' }); }); });
+            } catch (e) {}
+            let overview = []; try { overview = (r.overview_path || []).map(p => ({ lat: p.lat(), lng: p.lng() })); } catch (e) {}
+            const usePath = detailed.length >= overview.length ? detailed : overview;
+            if (!usePath.length) return;
+            const leg0 = (r.legs && r.legs[0]) || {};
+            exactWalkCache[legKey] = { googlePath: usePath, leafPath: usePath.map(p => [p.lat, p.lng]), distanceText: (leg0.distance && leg0.distance.text) || '', durationText: (leg0.duration && leg0.duration.text) || '', distanceValue: (leg0.distance && leg0.distance.value) || 0, steps: gSteps, source: 'google' };
+            const poly = gmapWalkPolylines[legIdx];
+            if (poly) { try { poly.setPath(usePath); poly.setOptions({ strokeOpacity: 0.95, strokeWeight: 5, geodesic: false }); } catch (e) {} }
+            if (legKey === currentLegKey()) updateInAppDrawer();
+            updateStatsWithExact();
+          }
+        });
+      }, legIdx * 250);
+    }
+    function scheduleOsrmLeg(fromP, toP, legKey, legIdx, token) {
+      if (exactWalkCache[legKey]) return;
+      setTimeout(async () => {
+        if (token !== exactFetchToken) return;
+        try {
+          const url = 'https://router.project-osrm.org/route/v1/foot/' + fromP.lng + ',' + fromP.lat + ';' + toP.lng + ',' + toP.lat + '?overview=full&geometries=geojson&steps=true';
+          const res = await fetch(url); if (token !== exactFetchToken) return;
+          const data = await res.json(); if (!data || data.code !== 'Ok' || !data.routes || !data.routes[0]) return;
+          const rt = data.routes[0];
+          const leafCoords = ((rt.geometry && rt.geometry.coordinates) ? rt.geometry.coordinates : []).map(c => [c[1], c[0]]);
+          if (leafCoords.length < 2) return;
+          const googleCoords = leafCoords.map(c => ({ lat: c[0], lng: c[1] }));
+          const steps = []; (rt.legs || []).forEach(l => { (l.steps || []).forEach(s => { const m = s.maneuver || {}; const road = (s.name ? (' onto ' + s.name) : ''); const instr = (((m.type || '') + ' ' + (m.modifier || '') + road).trim() || 'Continue'); steps.push({ instruction: instr, distance: (s.distance >= 1000 ? (s.distance / 1000).toFixed(1) + ' km' : Math.round(s.distance) + ' m') }); }); });
+          exactWalkCache[legKey] = { googlePath: googleCoords, leafPath: leafCoords, distanceText: (rt.distance >= 1000 ? (rt.distance / 1000).toFixed(1) + ' km' : Math.round(rt.distance) + ' m'), durationText: Math.round(rt.duration / 60) + ' min', distanceValue: rt.distance, steps: steps, source: 'osrm' };
+          const poly = leafletWalkPolylines[legIdx];
+          if (poly) { try { poly.setLatLngs(leafCoords); poly.setStyle({ dashArray: null, opacity: 0.95 }); } catch (e) {} }
+          if (legKey === currentLegKey()) updateInAppDrawer();
+        } catch (e) {}
+      }, legIdx * 200);
+    }
+
+    // Helper: SVG Pin Marker
+    function createGoogleMarkerIcon(badge, color, isDone) {
+      const bg = isDone ? '#94a3b8' : color;
+      const isStart = badge === 'START';
+      const size = isStart ? 34 : 28;
+      const fontSize = isStart ? '9px' : '11px';
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">' +
+        '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + (size/2 - 2) + '" fill="' + bg + '" stroke="#ffffff" stroke-width="2.5" />' +
+        '<text x="' + (size/2) + '" y="' + (size/2 + 4) + '" text-anchor="middle" fill="#ffffff" font-family=\'"Jost", sans-serif\' font-weight="800" font-size="' + fontSize + '">' + badge + '</text>' +
+        '</svg>';
+      return {
+        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+        scaledSize: new google.maps.Size(size, size),
+        anchor: new google.maps.Point(size / 2, size / 2)
+      };
+    }
+
+    function createAutoGoogleIcon() {
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">' +
+        '<circle cx="15" cy="15" r="13" fill="#C99A2B" stroke="#ffffff" stroke-width="2.5" />' +
+        '<text x="15" y="19" text-anchor="middle" font-size="13">🛺</text>' +
+        '</svg>';
+      return {
+        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+        scaledSize: new google.maps.Size(30, 30),
+        anchor: new google.maps.Point(15, 15)
+      };
+    }
+
+    // Leaflet init
+    function initLeafletMap() {
+      if (leafletMap) return;
+      const mapEl = document.getElementById('map');
+      mapEl.innerHTML = '';
+      leafletMap = L.map('map', { zoomControl: false }).setView([22.5175, 88.3540], 14);
+      L.control.zoom({ position: 'bottomright' }).addTo(leafletMap);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+        maxZoom: 19
+      }).addTo(leafletMap);
+      leafletGroup = L.layerGroup().addTo(leafletMap);
+      currentProvider = 'leaflet';
+      updateEngineBadge();
+    }
+
+    // Google Maps API init
+    function initGoogleMapsApi() {
+      return new Promise((resolve, reject) => {
+        if (window.google && window.google.maps) return resolve();
+        window.gm_authFailure = () => {
+          console.warn('Google Maps auth error. Switching to OpenStreetMap.');
+          currentProvider = 'leaflet';
+          initLeafletMap();
+          renderMap();
+        };
+
+        const script = document.createElement('script');
+        const keyParam = gmapsApiKey ? '&key=' + encodeURIComponent(gmapsApiKey) : '';
+        script.src = 'https://maps.googleapis.com/maps/api/js?v=weekly' + keyParam + '&libraries=geometry&callback=__googleMapsLoaded';
+        script.async = true;
+        script.defer = true;
+        window.__googleMapsLoaded = () => resolve();
+        script.onerror = (err) => reject(err);
+        document.head.appendChild(script);
+      });
+    }
+
+    function setupGoogleMap() {
+      const mapEl = document.getElementById('map');
+      mapEl.innerHTML = '';
+      gmap = new google.maps.Map(mapEl, {
+        center: { lat: 22.5175, lng: 88.3540 },
+        zoom: 14,
+        mapTypeControl: true,
+        streetViewControl: false,
+        fullscreenControl: false,
+        zoomControl: true,
+        // One finger scrolls the page on touch phones; two fingers pan the map
+        gestureHandling: (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ? 'cooperative' : 'greedy',
+        styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }]
+      });
+      gmapInfoWindow = new google.maps.InfoWindow();
+      gmapTrafficLayer = new google.maps.TrafficLayer();
+      currentProvider = 'google';
+      updateEngineBadge();
+    }
+
+    function updateEngineBadge() {
+      const badge = document.getElementById('engineLabel');
+      const dot = document.getElementById('engineDot');
+      if (badge) badge.textContent = currentProvider === 'google' ? 'Google Maps API' : 'OpenStreetMap';
+      if (dot) dot.className = currentProvider === 'google' ? 'w-2 h-2 rounded-full bg-emerald-500' : 'w-2 h-2 rounded-full bg-blue-500';
+    }
+
+    // Render Polylines & Markers on Map — exact Google walking geometry
+    function renderMap() {
+      const route = ROUTES[currentMode];
+      exactFetchToken++;
+      const myToken = exactFetchToken;
+      try { const sb = document.getElementById('routeStatsBadge'); if (sb) sb.textContent = (route.stats || '') + ' • Fetching Google walking paths…'; } catch (e) {}
+
+      if (currentProvider === 'google' && gmap) {
+        // Clear Google layers
+        Object.values(gmapMarkers).forEach(m => m.setMap(null));
+        gmapMarkers = {};
+        gmapAutoMarkers.forEach(m => m.setMap(null));
+        gmapAutoMarkers = [];
+        gmapWalkPolylines.forEach(p => p.setMap(null));
+        gmapWalkPolylines = [];
+        gmapAutoPolylines.forEach(p => p.setMap(null));
+        gmapAutoPolylines = [];
+
+        const bounds = new google.maps.LatLngBounds();
+
+        // 1. Draw Exact Google Walking Paths (live Directions API, OSRM cache as placeholder)
+        for (let i = 0; i < route.stops.length - 1; i++) {
+          const fromKey = route.stops[i].key;
+          const toKey = route.stops[i + 1].key;
+          const legKey = fromKey + '_' + toKey;
+          const cached = STREET_ROUTES[legKey];
+          const live = exactWalkCache[legKey];
+
+          let coords = [];
+          let isExact = false;
+          if (live && live.googlePath && live.googlePath.length) {
+            coords = live.googlePath; isExact = true;
+          } else if (cached && cached.coordinates && cached.coordinates.length) {
+            coords = cached.coordinates.map(c => ({ lat: c[0], lng: c[1] }));
+          } else {
+            coords = [
+              { lat: PLACES[fromKey].lat, lng: PLACES[fromKey].lng },
+              { lat: PLACES[toKey].lat, lng: PLACES[toKey].lng }
+            ];
+          }
+
+          coords.forEach(pt => bounds.extend(pt));
+
+          const poly = new google.maps.Polyline({
+            path: coords,
+            geodesic: isExact ? false : true,
+            strokeColor: '#7A1C1C',
+            strokeOpacity: isExact ? 0.95 : 0.55,
+            strokeWeight: isExact ? 5 : 4,
+            map: gmap
+          });
+          poly.addListener('click', () => {
+            selectLeg(i + 1);
+          });
+          gmapWalkPolylines.push(poly);
+          if (!isExact) scheduleGoogleLeg(PLACES[fromKey], PLACES[toKey], legKey, i, myToken);
+        }
+
+        // 2. Draw Auto Routes & Stand Markers
+        if (showAutoStands) {
+          AUTO_STANDS.forEach(stand => {
+            const autoPoly = new google.maps.Polyline({
+              path: stand.path.map(c => ({ lat: c[0], lng: c[1] })),
+              geodesic: true,
+              strokeColor: '#C99A2B',
+              strokeOpacity: 0.9,
+              strokeWeight: 5,
+              map: gmap
+            });
+            gmapAutoPolylines.push(autoPoly);
+
+            const autoMarker = new google.maps.Marker({
+              position: { lat: stand.lat, lng: stand.lng },
+              map: gmap,
+              title: stand.name,
+              icon: createAutoGoogleIcon()
+            });
+            autoMarker.addListener('click', () => {
+              openAutoStandPopup(stand);
+            });
+            gmapAutoMarkers.push(autoMarker);
+          });
+        }
+
+        // 3. Pandal Markers
+        route.stops.forEach((step, idx) => {
+          const p = PLACES[step.key];
+          const isDone = !!checkedStops[step.key];
+          const marker = new google.maps.Marker({
+            position: { lat: p.lat, lng: p.lng },
+            map: gmap,
+            title: p.name,
+            icon: createGoogleMarkerIcon(step.badge, p.color, isDone)
+          });
+          marker.addListener('click', () => {
+            selectLeg(idx > 0 ? idx : 1);
+            focusStop(step.key);
+          });
+          gmapMarkers[step.key] = marker;
+        });
+
+        gmap.fitBounds(bounds, { top: 35, bottom: 35, left: 35, right: 35 });
+      } else {
+        // Leaflet Render
+        if (!leafletMap) initLeafletMap();
+        leafletGroup.clearLayers();
+        leafletMarkers = {};
+        leafletAutoMarkers = [];
+        leafletWalkPolylines = [];
+        leafletAutoPolylines = [];
+
+        const allLatLngs = [];
+
+        // 1. Draw Exact Street Walking Paths (live Google cache > OSRM cache > OSRM fetch)
+        for (let i = 0; i < route.stops.length - 1; i++) {
+          const fromKey = route.stops[i].key;
+          const toKey = route.stops[i + 1].key;
+          const legKey = fromKey + '_' + toKey;
+          const cached = STREET_ROUTES[legKey];
+          const live = exactWalkCache[legKey];
+
+          let coords = [];
+          let isExact = false;
+          if (live && live.leafPath && live.leafPath.length > 2) {
+            coords = live.leafPath; isExact = true;
+          } else if (cached && cached.coordinates && cached.coordinates.length) {
+            coords = cached.coordinates; isExact = cached.coordinates.length > 2;
+          } else {
+            coords = [
+              [PLACES[fromKey].lat, PLACES[fromKey].lng],
+              [PLACES[toKey].lat, PLACES[toKey].lng]
+            ];
+          }
+
+          coords.forEach(pt => allLatLngs.push(pt));
+
+          const poly = L.polyline(coords, {
+            color: '#7A1C1C',
+            weight: 4.5,
+            opacity: isExact ? 0.95 : 0.6,
+            dashArray: isExact ? null : '4, 6'
+          }).addTo(leafletGroup);
+
+          poly.on('click', () => selectLeg(i + 1));
+          leafletWalkPolylines.push(poly);
+          if (!live) scheduleOsrmLeg(PLACES[fromKey], PLACES[toKey], legKey, i, myToken);
+        }
+
+        // 2. Draw Auto Routes & Stand Markers
+        if (showAutoStands) {
+          AUTO_STANDS.forEach(stand => {
+            const autoPoly = L.polyline(stand.path, {
+              color: '#C99A2B',
+              weight: 5,
+              opacity: 0.9,
+              dashArray: '6, 6'
+            }).addTo(leafletGroup);
+            leafletAutoPolylines.push(autoPoly);
+
+            const autoIcon = L.divIcon({
+              className: '',
+              html: '<div class="auto-pin" style="width:30px;height:30px;">🛺</div>',
+              iconSize: [30, 30],
+              iconAnchor: [15, 15]
+            });
+            const autoMarker = L.marker([stand.lat, stand.lng], { icon: autoIcon }).addTo(leafletGroup);
+            autoMarker.on('click', () => openAutoStandPopup(stand));
+            leafletAutoMarkers.push(autoMarker);
+          });
+        }
+
+        // 3. Pandal Markers
+        route.stops.forEach((step, idx) => {
+          const p = PLACES[step.key];
+          const isDone = !!checkedStops[step.key];
+          const pinSize = step.badge === 'START' ? 34 : 28;
+          const bgColor = isDone ? '#94a3b8' : p.color;
+
+          const icon = L.divIcon({
+            className: '',
+            html: '<div class="custom-pin" style="width:' + pinSize + 'px;height:' + pinSize + 'px;background:' + bgColor + ';font-size:' + (step.badge === 'START' ? '9px' : '11px') + '">' + step.badge + '</div>',
+            iconSize: [pinSize, pinSize],
+            iconAnchor: [pinSize / 2, pinSize / 2]
+          });
+
+          const marker = L.marker([p.lat, p.lng], { icon }).addTo(leafletGroup);
+          marker.on('click', () => {
+            selectLeg(idx > 0 ? idx : 1);
+            focusStop(step.key);
+          });
+          leafletMarkers[step.key] = marker;
+        });
+
+        if (allLatLngs.length) {
+          leafletMap.fitBounds(L.polyline(allLatLngs).getBounds(), { padding: [35, 35] });
+        }
+      }
+
+      updateInAppDrawer();
+    }
+
+    // Auto Stand Popup
+    function openAutoStandPopup(stand) {
+      const content = '<div style="font-family:\'Jost\',sans-serif; min-width:210px; max-width:260px;">' +
+        '<div style="font-size:10px; font-weight:800; color:#9A7418; text-transform:uppercase;">🛺 Shared Auto Stand</div>' +
+        '<h4 style="font-size:13px; font-weight:700; margin:3px 0; color:#4A0E0E;">' + stand.name + '</h4>' +
+        '<p style="font-size:11px; font-weight:600; color:#7A1C1C; margin-bottom:4px;">Route: ' + stand.route + '</p>' +
+        '<div style="background:#F7E8B8; border:1px solid #E8C86A; border-radius:6px; padding:6px; font-size:11px; margin-bottom:6px;">' +
+          '<div><strong>📍 Board at:</strong> ' + stand.pickupDesc + '</div>' +
+          '<div style="margin-top:3px;"><strong>🎯 Drop at:</strong> ' + stand.dropDesc + '</div>' +
+          '<div style="margin-top:3px;"><strong>💵 Fare:</strong> ' + stand.fare + ' • <em>' + stand.timeSaved + '</em></div>' +
+        '</div>' +
+      '</div>';
+
+      if (currentProvider === 'google' && gmap) {
+        gmapInfoWindow.setContent(content);
+        gmapInfoWindow.setPosition({ lat: stand.lat, lng: stand.lng });
+        gmapInfoWindow.open(gmap);
+      } else if (leafletMap) {
+        L.popup().setLatLng([stand.lat, stand.lng]).setContent(content).openOn(leafletMap);
+      }
+    }
+
+    // Focus on Stop
+    function focusStop(key) {
+      const p = PLACES[key];
+      const route = ROUTES[currentMode];
+      const stepIdx = route.stops.findIndex(s => s.key === key);
+      const step = route.stops[stepIdx];
+
+      const content = '<div style="font-family:\'Jost\',sans-serif; padding:2px 4px; max-width:220px;">' +
+        '<div style="font-size:10px; font-weight:700; color:#7A1C1C; text-transform:uppercase;">Stop ' + (step ? step.badge : '') + '</div>' +
+        '<div style="font-size:14px; font-weight:700; color:#4A0E0E; margin:2px 0;">' + p.name + '</div>' +
+        '<div style="font-size:11px; color:#3A2420; margin-bottom:4px;">' + (step ? step.leg : '') + '</div>' +
+        '<div style="font-size:11px; color:#9A7418; margin-bottom:6px;">' + p.address + '</div>' +
+      '</div>';
+
+      if (currentProvider === 'google' && gmap && gmapMarkers[key]) {
+        gmap.panTo({ lat: p.lat, lng: p.lng });
+        gmap.setZoom(16);
+        gmapInfoWindow.setContent(content);
+        gmapInfoWindow.open(gmap, gmapMarkers[key]);
+      } else if (leafletMap && leafletMarkers[key]) {
+        leafletMap.flyTo([p.lat, p.lng], 16, { duration: 0.5 });
+        leafletMarkers[key].bindPopup(content).openPopup();
+      }
+    }
+
+    // Select Leg & update In-App Navigation Drawer
+    function selectLeg(legIndex) {
+      const route = ROUTES[currentMode];
+      if (legIndex < 1) legIndex = 1;
+      if (legIndex >= route.stops.length) legIndex = route.stops.length - 1;
+      currentLegIndex = legIndex;
+      updateInAppDrawer();
+    }
+
+    function updateInAppDrawer() {
+      const route = ROUTES[currentMode];
+      if (currentLegIndex < 1 || currentLegIndex >= route.stops.length) currentLegIndex = 1;
+
+      const fromStop = route.stops[currentLegIndex - 1];
+      const toStop = route.stops[currentLegIndex];
+      const fromP = PLACES[fromStop.key];
+      const toP = PLACES[toStop.key];
+      const legKey = fromStop.key + '_' + toStop.key;
+      const cached = STREET_ROUTES[legKey];
+      const live = (typeof exactWalkCache !== 'undefined') ? exactWalkCache[legKey] : null;
+
+      document.getElementById('drawerLegBadge').textContent = 'Leg ' + currentLegIndex + ' of ' + (route.stops.length - 1);
+      document.getElementById('drawerLegTitle').textContent = fromP.name + ' ➔ ' + toP.name;
+
+      const distText = live ? ((live.distanceText || '') + (live.durationText ? ' • ' + live.durationText : '') + (live.source === 'google' ? ' (Google)' : '')) : (cached ? (cached.distance + ' m • ~' + cached.duration + ' min') : toStop.leg);
+      document.getElementById('drawerWalkDist').textContent = distText;
+
+      // Populate Walk Steps — live Google first, then OSRM cache
+      const walkListEl = document.getElementById('drawerWalkContent');
+      walkListEl.innerHTML = '';
+      const stepsToShow = (live && live.steps && live.steps.length) ? live.steps : ((cached && cached.steps) ? cached.steps : []);
+      if (live && live.steps && live.steps.length) {
+        const banner = document.createElement('div');
+        banner.className = 'py-1 px-2 mb-1 rounded-md text-[10px] font-bold ' + (live.source === 'google' ? 'bg-emerald-50 border border-emerald-200 text-emerald-800' : 'bg-blue-50 border border-blue-200 text-blue-800');
+        banner.textContent = '✓ Exact ' + (live.source === 'google' ? 'Google Maps' : 'street') + ' walking path • ' + (live.distanceText || '') + (live.durationText ? ' • ' + live.durationText : '');
+        walkListEl.appendChild(banner);
+      }
+      if (stepsToShow.length) {
+        stepsToShow.forEach((st, i) => {
+          const item = document.createElement('div');
+          item.className = 'flex items-start gap-1.5 py-0.5 border-b border-gold/20 text-[11px]';
+          item.innerHTML = '<span class="text-maroon font-bold">' + (i + 1) + '.</span>' +
+            '<span class="text-coco flex-1">' + st.instruction + '</span>' +
+            '<span class="text-gold-dark font-mono text-[10px]">' + st.distance + '</span>';
+          walkListEl.appendChild(item);
+        });
+        if (!live) {
+          const note = document.createElement('p');
+          note.className = 'text-coco/60 bg-cream py-1 text-[10px]';
+          note.textContent = '⏳ Upgrading to live Google walking path…';
+          walkListEl.appendChild(note);
+        }
+      } else {
+        walkListEl.innerHTML = '<p class="text-coco/70 bg-cream py-1 text-[11px]">⏳ Fetching exact Google walking path… straight line shown meanwhile: ' + toStop.leg + '</p>';
+      }
+
+      // Check if this leg has an Auto Option
+      const autoStandId = toStop.autoStand;
+      const stand = autoStandId ? AUTO_STANDS.find(s => s.id === autoStandId) : null;
+      const autoTabBtn = document.getElementById('drawerTabAuto');
+      const autoContentEl = document.getElementById('drawerAutoContent');
+
+      if (stand) {
+        autoTabBtn.classList.remove('hidden');
+        document.getElementById('drawerAutoLabel').textContent = 'Auto Option (' + stand.fare + ')';
+        autoContentEl.innerHTML = '<div class="bg-gold-pale border border-gold rounded-xl p-2.5 text-coco">' +
+          '<div class="flex items-center justify-between mb-1">' +
+            '<span class="font-bold text-maroon-deep text-xs">🛺 ' + stand.name + '</span>' +
+            '<span class="px-1.5 py-0.5 rounded-full bg-gold border border-gold-dark/40 font-bold text-maroon-deep text-[10px]">' + stand.fare + '</span>' +
+          '</div>' +
+          '<p class="text-[11px] text-maroon-soft font-medium">Route: ' + stand.route + '</p>' +
+          '<div class="mt-1.5 space-y-1 text-[11px]">' +
+            '<div><strong>📍 Board at:</strong> ' + stand.pickupDesc + '</div>' +
+            '<div><strong>🎯 Drop at:</strong> ' + stand.dropDesc + '</div>' +
+            '<div class="text-emerald-700 font-semibold">⚡ ' + stand.timeSaved + '</div>' +
+          '</div>' +
+        '</div>';
+      } else {
+        autoTabBtn.classList.add('hidden');
+        autoContentEl.innerHTML = '<p class="text-coco/60 bg-cream py-1 text-[11px]">Best traversed on foot (short neighborhood lanes).</p>';
+      }
+
+      // Show walk tab by default
+      document.getElementById('drawerTabWalk').className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-maroon text-ivory shadow-xs';
+      document.getElementById('drawerTabAuto').className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-cream border border-gold/50 hover:bg-gold/20 text-maroon-deep flex items-center gap-1';
+      document.getElementById('drawerWalkContent').classList.remove('hidden');
+      document.getElementById('drawerAutoContent').classList.add('hidden');
+
+      // Make drawer visible
+      document.getElementById('inAppGuideDrawer').classList.remove('hidden');
+    }
+
+    // Render Sidebar List
+    function renderSidebar() {
+      const route = ROUTES[currentMode];
+      document.getElementById('routeStatsBadge').textContent = route.stats;
+      try { if (typeof updateStatsWithExact === 'function') updateStatsWithExact(); } catch (e) {}
+
+      if (route.part1Url && document.getElementById('gmapsPart1Link')) {
+        document.getElementById('gmapsPart1Link').href = route.part1Url;
+      }
+      if (route.part2Url && document.getElementById('gmapsPart2Link')) {
+        document.getElementById('gmapsPart2Link').href = route.part2Url;
+      }
+
+      const totalCount = route.stops.length;
+      const doneCount = route.stops.filter(s => !!checkedStops[s.key]).length;
+      const pct = Math.round((doneCount / totalCount) * 100);
+      document.getElementById('progressCounter').textContent = doneCount + ' / ' + totalCount + ' visited';
+      document.getElementById('progressBar').style.width = pct + '%';
+
+      ['modeLoopBtn', 'modeOriginalBtn', 'modeMidDhabaBtn'].forEach(id => {
+        const btn = document.getElementById(id);
+        const modeKey = id === 'modeLoopBtn' ? 'loop' : id === 'modeOriginalBtn' ? 'original' : 'midDhaba';
+        if (modeKey === currentMode) {
+          btn.className = 'px-3 py-1.5 rounded-full font-semibold transition bg-maroon text-ivory shadow-sm';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-full font-semibold transition text-maroon hover:bg-gold/20';
+        }
+      });
+
+      const listEl = document.getElementById('stopsListContainer');
+      listEl.innerHTML = '';
+
+      const visibleStops = route.stops.filter(s => filterMode === 'all' || !checkedStops[s.key]);
+      if (visibleStops.length === 0) {
+        listEl.innerHTML = '<div class="p-8 text-center text-coco/60 text-xs">🎉 All pandals visited! Tap "All" to review.</div>';
+        return;
+      }
+
+      visibleStops.forEach((step, idx) => {
+        const p = PLACES[step.key];
+        const isDone = !!checkedStops[step.key];
+        const hasAuto = !!step.autoStand;
+
+        const card = document.createElement('div');
+        card.className = 'p-2.5 rounded-2xl border transition cursor-pointer flex items-center justify-between gap-2.5 ' +
+          (isDone ? 'bg-ivory border-gold/30 opacity-60' : 'bg-cream border-maroon/15 hover:border-gold hover:shadow-sm');
+
+        card.innerHTML = '<div class="flex items-center gap-2.5 min-w-0">' +
+          '<div class="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-[10px] shrink-0" style="background:' + (isDone ? '#94a3b8' : p.color) + '">' +
+            step.badge +
+          '</div>' +
+          '<div class="min-w-0">' +
+            '<div class="flex items-center gap-1.5">' +
+              '<h4 class="font-serif font-bold text-xs text-maroon-deep truncate leading-snug ' + (isDone ? 'line-through text-coco/40' : '') + '">' + p.name + '</h4>' +
+              (hasAuto ? '<span class="px-1.5 py-0.2 rounded-full bg-gold-pale border border-gold/50 text-maroon-deep text-[9px] font-bold">🛺 Auto</span>' : '') +
+            '</div>' +
+            '<p class="text-[11px] text-coco/70 truncate leading-tight">' + step.leg + '</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="flex items-center gap-1.5 shrink-0">' +
+          '<button data-nav-idx="' + (idx > 0 ? idx : 1) + '" class="px-2 py-1 bg-maroon/10 hover:bg-maroon hover:text-ivory text-maroon rounded-full border border-maroon/20 text-[10px] font-semibold transition" title="Show Exact Street Guide">' +
+            'Guide' +
+          '</button>' +
+          '<button data-toggle-key="' + step.key + '" class="w-6 h-6 rounded-md flex items-center justify-center transition border ' +
+            (isDone ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-gold/60 hover:border-maroon text-transparent hover:text-gold-dark') +
+          '" title="Mark stop as visited">✓</button>' +
+        '</div>';
+
+        card.addEventListener('click', (e) => {
+          const toggleBtn = e.target.closest('[data-toggle-key]');
+          if (toggleBtn) {
+            e.stopPropagation();
+            const k = toggleBtn.getAttribute('data-toggle-key');
+            checkedStops[k] = !checkedStops[k];
+            saveChecked();
+            renderSidebar();
+            renderMap();
+            return;
+          }
+          const navBtn = e.target.closest('[data-nav-idx]');
+          if (navBtn) {
+            e.stopPropagation();
+            const nIdx = parseInt(navBtn.getAttribute('data-nav-idx'), 10);
+            selectLeg(nIdx);
+            focusStop(step.key);
+            return;
+          }
+          selectLeg(idx > 0 ? idx : 1);
+          focusStop(step.key);
+        });
+
+        listEl.appendChild(card);
+      });
+    }
+
+    // Event Listeners for In-App Drawer
+    document.getElementById('drawerPrevBtn').addEventListener('click', () => {
+      selectLeg(currentLegIndex - 1);
+    });
+    document.getElementById('drawerNextBtn').addEventListener('click', () => {
+      selectLeg(currentLegIndex + 1);
+    });
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+      document.getElementById('inAppGuideDrawer').classList.add('hidden');
+    });
+
+    document.getElementById('drawerTabWalk').addEventListener('click', () => {
+      document.getElementById('drawerTabWalk').className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-maroon text-ivory shadow-xs';
+      document.getElementById('drawerTabAuto').className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-cream border border-gold/50 hover:bg-gold/20 text-maroon-deep flex items-center gap-1';
+      document.getElementById('drawerWalkContent').classList.remove('hidden');
+      document.getElementById('drawerAutoContent').classList.add('hidden');
+    });
+
+    document.getElementById('drawerTabAuto').addEventListener('click', () => {
+      document.getElementById('drawerTabAuto').className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-maroon text-ivory shadow-xs flex items-center gap-1';
+      document.getElementById('drawerTabWalk').className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-cream border border-gold/50 hover:bg-gold/20 text-maroon-deep';
+      document.getElementById('drawerAutoContent').classList.remove('hidden');
+      document.getElementById('drawerWalkContent').classList.add('hidden');
+    });
+
+    // Sub-bar Buttons
+    document.getElementById('openNavGuideBtn').addEventListener('click', () => {
+      document.getElementById('inAppGuideDrawer').classList.toggle('hidden');
+    });
+
+    document.getElementById('toggleAutoStandsBtn').addEventListener('click', () => {
+      showAutoStands = !showAutoStands;
+      document.getElementById('toggleAutoStandsBtn').className = showAutoStands
+        ? 'btn-gold px-2.5 py-1.5 rounded-full font-semibold bg-gold-pale border border-gold text-maroon-deep hover:bg-gold-light/50 transition shadow-sm flex items-center gap-1'
+        : 'px-2.5 py-1.5 rounded-full font-medium bg-cream border border-gold/40 text-coco/50 hover:bg-gold/20 transition flex items-center gap-1';
+      renderMap();
+    });
+
+    document.getElementById('fitBoundsBtn').addEventListener('click', () => {
+      renderMap();
+    });
+
+    document.getElementById('trafficBtn').addEventListener('click', () => {
+      if (currentProvider === 'google' && gmap && gmapTrafficLayer) {
+        showTraffic = !showTraffic;
+        gmapTrafficLayer.setMap(showTraffic ? gmap : null);
+        document.getElementById('trafficBtn').className = showTraffic
+          ? 'px-2.5 py-1.5 rounded-full font-semibold bg-maroon text-ivory transition shadow-sm'
+          : 'px-2.5 py-1.5 rounded-full font-medium bg-cream border border-gold/50 hover:bg-gold/20 text-maroon-deep transition';
+      } else {
+        alert('Live traffic is active when Google Maps API is connected.');
+      }
+    });
+
+    // Mode Switches
+    document.getElementById('modeLoopBtn').addEventListener('click', () => {
+      currentMode = 'loop';
+      currentLegIndex = 1;
+      renderSidebar();
+      renderMap();
+    });
+    document.getElementById('modeOriginalBtn').addEventListener('click', () => {
+      currentMode = 'original';
+      currentLegIndex = 1;
+      renderSidebar();
+      renderMap();
+    });
+    document.getElementById('modeMidDhabaBtn').addEventListener('click', () => {
+      currentMode = 'midDhaba';
+      currentLegIndex = 1;
+      renderSidebar();
+      renderMap();
+    });
+
+    // Progress Filters
+    document.getElementById('filterAllBtn').addEventListener('click', () => {
+      filterMode = 'all';
+      document.getElementById('filterAllBtn').className = 'px-2 py-0.5 rounded-full font-semibold bg-maroon text-ivory shadow-sm';
+      document.getElementById('filterRemainingBtn').className = 'px-2 py-0.5 rounded-full font-medium text-maroon hover:bg-gold/20';
+      renderSidebar();
+    });
+
+    document.getElementById('filterRemainingBtn').addEventListener('click', () => {
+      filterMode = 'remaining';
+      document.getElementById('filterRemainingBtn').className = 'px-2 py-0.5 rounded-full font-semibold bg-maroon text-ivory shadow-sm';
+      document.getElementById('filterAllBtn').className = 'px-2 py-0.5 rounded-full font-medium text-maroon hover:bg-gold/20';
+      renderSidebar();
+    });
+
+    document.getElementById('resetProgressBtn').addEventListener('click', () => {
+      checkedStops = {};
+      saveChecked();
+      renderSidebar();
+      renderMap();
+    });
+
+    // Google Maps API key is managed in code only (DEFAULT_API_KEY). No in-app key editor.
+    try { document.getElementById('year').textContent = new Date().getFullYear(); } catch (e) {}
+
+    // Keep Leaflet correctly sized on rotate / Chrome address-bar collapse
+    let mapResizeTimer = null;
+    function refreshLeafletSize() {
+      try { if (typeof leafletMap !== 'undefined' && leafletMap) leafletMap.invalidateSize(); } catch (e) {}
+    }
+    window.addEventListener('resize', () => { clearTimeout(mapResizeTimer); mapResizeTimer = setTimeout(refreshLeafletSize, 200); });
+    window.addEventListener('orientationchange', () => { setTimeout(refreshLeafletSize, 350); });
+
+    // Init App
+    async function initApp() {
+      renderSidebar();
+      if (currentProvider === 'google' && gmapsApiKey) {
+        try {
+          await initGoogleMapsApi();
+          setupGoogleMap();
+          renderMap();
+        } catch (e) {
+          console.warn('Google Maps API failed, using OpenStreetMap:', e);
+          initLeafletMap();
+          renderMap();
+        }
+      } else {
+        initLeafletMap();
+        renderMap();
+      }
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
